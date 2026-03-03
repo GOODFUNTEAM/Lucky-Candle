@@ -1,93 +1,49 @@
-@font-face {
-    font-family: 'JinXuan';
-    src: url('jf-jinxuan-3.1-medium.otf') format('opentype');
-    font-weight: 500;
-}
-
-:root {
-    --strawberry-red: #e63946;
-    --text-dark: #333333;
-}
-
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-body, html {
-    margin: 0; padding: 0; width: 100%; height: 100%;
-    overflow: hidden; background-color: #fce4ec;
-    font-family: 'JinXuan', sans-serif;
-}
-
-.global-container {
-    width: 100%; height: 100%;
-    background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3)), 
-                url('cake_bg.jpg') center/cover no-repeat;
-    position: relative; display: flex; justify-content: center; align-items: center;
-}
-
-.stage { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.5s; }
-.hidden { opacity: 0; pointer-events: none; }
-
-/* 初始畫面文字 */
-.hint {
-    margin-top: 20px;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-    color: var(--strawberry-red);
-    text-shadow: 0 0 10px rgba(255,255,255,0.8);
-}
-
-/* 輪播與打火機 PNG 設定 */
-.carousel-window { width: 300px; height: 450px; overflow: hidden; position: relative; }
-.slips-slider { display: flex; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); height: 100%; }
-
-.slip {
-    width: 300px; height: 450px; flex-shrink: 0;
-    background-size: contain; background-repeat: no-repeat; background-position: center;
-    display: flex; justify-content: center;
-    position: relative; /* 重要：讓文字以此定位 */
-}
-
-/* 確保 PNG 檔名正確 */
-.slip.green { background-image: url('打火機_G_0.png'); }
-.slip.white { background-image: url('打火機_W_0.png'); }
-.slip.red   { background-image: url('打火機_R_0.png'); }
-
-.vertical-text {
-    writing-mode: vertical-rl;
-    font-family: 'JinXuan', serif;
-    font-size: 1.1rem;
-    letter-spacing: 3px;
-    line-height: 1.5;
-    color: var(--text-dark);
-    
-    /* 絕對中心定位：解決歪掉的問題 */
+/* 左右導航箭頭 - 強化版 */
+.nav-btn {
+    /* 基本設定 */
     position: absolute;
-    top: 55%; /* 根據你的 PNG 圖稿微調，55% 通常是機身中心 */
-    left: 50%;
-    transform: translate(-50%, -50%);
+    z-index: 20; /* 確保在打火機之上 */
+    top: 50%; /* 垂直置中 */
+    transform: translateY(-50%); /* 完美的垂直對齊 */
     
-    max-height: 250px;
-    text-align: center;
-    white-space: nowrap;
+    /* 視覺強化：圓形背景與顏色 */
+    background-color: rgba(255, 255, 255, 0.85); /* 半透明白色背景，提高對比 */
+    color: var(--strawberry-red); /* 箭頭使用草莓紅 */
+    border: none;
+    
+    /* 尺寸與形狀：放大觸控範圍 */
+    width: 50px;
+    height: 50px;
+    border-radius: 50%; /* 圓形 */
+    
+    /* 字體與對齊：確保箭頭置中 */
+    font-size: 1.6rem; /* 放大箭頭符號 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* 質感提升：加入陰影與過渡效果 */
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* 深色陰影，增加立體感 */
+    transition: all 0.3s ease;
+    
+    /* 防止文字被選取 */
+    user-select: none;
+    -webkit-user-select: none;
 }
 
-/* 按鈕風格統一樣式 */
-button, .btn-main, .btn-secondary, .btn-again, .btn-confirm {
-    font-family: 'JinXuan', sans-serif !important;
-    letter-spacing: 1.5px; cursor: pointer; transition: 0.3s; border: none;
+/* 觸控/滑鼠懸停效果 */
+.nav-btn:active, .nav-btn:hover {
+    background-color: rgba(255, 255, 255, 1); /* 變為純白 */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* 陰影加深 */
+    transform: translateY(-50%) scale(1.05); /* 輕微放大 */
 }
 
-.btn-main, .btn-confirm, .btn-again {
-    background: var(--strawberry-red); color: white;
-    padding: 12px 35px; border-radius: 30px; font-size: 1.05rem;
-    box-shadow: 0 4px 12px rgba(230, 57, 70, 0.2);
+/* 左右位置微調 */
+.prev {
+    left: 15px; /* 距離左側距離 */
 }
 
-.btn-secondary {
-    background: white; color: #666; border: 1px solid #ddd;
-    padding: 10px 20px; border-radius: 20px; font-size: 0.9rem;
+.next {
+    right: 15px; /* 距離右側距離 */
 }
-
-/* 結束畫面 */
-.finish-logo { width: 60vw; max-width: 250px; margin-bottom: 20px; }
-.finish-text { color: #444; font-size: 1.3rem; margin: 15px 0; letter-spacing: 2px; }
