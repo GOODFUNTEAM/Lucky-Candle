@@ -5,17 +5,21 @@ let holdTimer = null;
 const HOLD_TIME = 5000;
 
 window.onload = () => {
-    const candleArea = document.querySelector('.candle-container');
+    const candleArea = document.getElementById('candle-target');
     const hint = document.getElementById('touch-hint');
 
-    // 防止長按選單干擾
+    // 禁止系統預設選單
     candleArea.oncontextmenu = (e) => { e.preventDefault(); return false; };
 
     const startHold = (e) => {
+        // 確保只在初始階段觸發
         if (!document.getElementById('stage-init').classList.contains('active')) return;
+        
         e.preventDefault();
         candleArea.classList.add('charging');
         hint.innerText = "願望凝聚中...";
+        
+        clearTimeout(holdTimer);
         holdTimer = setTimeout(startAnimation, HOLD_TIME);
     };
 
@@ -27,6 +31,7 @@ window.onload = () => {
         }
     };
 
+    // 觸控與滑鼠事件綁定
     candleArea.addEventListener('touchstart', startHold, { passive: false });
     candleArea.addEventListener('touchend', endHold);
     candleArea.addEventListener('mousedown', startHold);
@@ -35,8 +40,10 @@ window.onload = () => {
 };
 
 function startAnimation() {
-    document.getElementById('stage-init').classList.add('hidden');
-    document.getElementById('stage-init').classList.remove('active');
+    const stageInit = document.getElementById('stage-init');
+    stageInit.classList.remove('active');
+    stageInit.classList.add('hidden');
+    
     document.getElementById('stage-main').classList.remove('hidden');
     generateSlips();
 }
@@ -84,7 +91,7 @@ function downloadShot() {
         const imgData = canvas.toDataURL("image/png");
         const preview = document.createElement('div');
         preview.style = "position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:999; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px;";
-        preview.innerHTML = `<img src="${imgData}" style="max-width:100%; max-height:70vh; border-radius:10px;"><p style="color:white; margin-top:15px;">☝️ 長按圖片儲存至相簿</p><button onclick="document.body.removeChild(this.parentElement)" style="margin-top:15px; padding:10px 30px; border-radius:20px; border:none; background:#fff;">返回</button>`;
+        preview.innerHTML = `<img src="${imgData}" style="max-width:100%; max-height:70vh; border-radius:10px;"><p style="color:white; margin-top:15px; font-family:sans-serif;">☝️ 長按圖片儲存至相簿</p><button onclick="document.body.removeChild(this.parentElement)" style="margin-top:15px; padding:10px 30px; border-radius:20px; border:none; background:#fff;">返回</button>`;
         document.body.appendChild(preview);
     });
 }
