@@ -3,7 +3,7 @@
     src: url('jf-jinxuan-3.1-medium.otf') format('opentype');
 }
 :root { --strawberry-red: #e63946; }
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: pan-y; }
 body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #fce4ec; font-family: 'JinXuan', sans-serif; }
 
 .global-container {
@@ -12,10 +12,10 @@ body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
     display: flex; justify-content: center; align-items: center;
 }
 
-.stage { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 60px 0; }
+.stage { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.5s; }
 .hidden { display: none !important; }
 
-/* 跑馬燈樣式修正 */
+/* 跑馬燈 */
 .marquee-wrapper {
     position: fixed; top: 12%; left: 0; width: 100%; overflow: hidden;
     background: rgba(230, 57, 70, 0.95); color: white; padding: 12px 0; z-index: 1000;
@@ -25,21 +25,30 @@ body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
 .marquee-content { display: inline-block; white-space: nowrap; font-size: 1.1rem; font-weight: bold; padding-left: 100%; animation: marquee-scroll 10s linear infinite; }
 @keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-150%); } }
 
-/* 蠟燭置中 */
-.candle-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+/* 蠟燭與爆炸動畫 */
+.candle-wrapper { display: flex; flex-direction: column; align-items: center; }
 .candle-container { position: relative; width: 280px; height: 280px; display: flex; justify-content: center; align-items: center; }
-.candle-img { width: 260px; height: auto; transition: transform 0.3s ease; }
+.candle-img { width: 260px; height: auto; position: absolute; }
 .hidden-img { display: none; }
 
-.candle-container.charging { animation: shadowGlow 3s linear forwards; }
-.candle-container.charging .candle-img { animation: breathe 0.8s ease-in-out infinite; }
-@keyframes shadowGlow { 0% { box-shadow: 0 0 10px 5px rgba(255, 230, 100, 0.2); } 100% { box-shadow: 0 0 150px 70px rgba(255, 150, 0, 0.8); border-radius: 50%; } }
+/* 核心要求：放大並消失動畫 */
+.explosion-effect {
+    display: block !important;
+    animation: explodeFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes explodeFade {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(3); opacity: 0; }
+}
+
+.candle-container.charging .candle-img#img-off { animation: breathe 0.8s ease-in-out infinite; }
 @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
-/* 輪播區塊 */
-.carousel-area { position: relative; width: 100%; display: flex; justify-content: center; align-items: center; margin-top: 20px; }
-.carousel-window { width: 320px; height: 450px; overflow: hidden; border-radius: 15px; }
-.slips-slider { display: flex; transition: transform 0.5s ease-out; width: 960px; }
+/* 輪播與籤紙 */
+.carousel-area { position: relative; width: 100%; display: flex; justify-content: center; align-items: center; }
+.carousel-window { width: 320px; height: 450px; overflow: hidden; border-radius: 15px; touch-action: none; }
+.slips-slider { display: flex; transition: transform 0.4s ease-out; width: 960px; }
 .slip { width: 320px; height: 450px; flex-shrink: 0; background-size: contain; background-repeat: no-repeat; background-position: center; position: relative; }
 .slip.green { background-image: url('打火機_G_0.png'); }
 .slip.white { background-image: url('打火機_W_0.png'); }
@@ -52,30 +61,19 @@ body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
     display: flex; flex-direction: row-reverse;
 }
 
-/* 導航箭頭修正 */
-.nav-btn {
-    position: absolute; top: 50%; transform: translateY(-50%); z-index: 50;
-    background: rgba(255,255,255,0.8); width: 40px; height: 40px; border-radius: 50%;
-    border: 1px solid #eee; color: var(--strawberry-red); font-size: 1rem;
-}
+/* 按鈕與導航 */
+.nav-btn { position: absolute; z-index: 50; background: rgba(255,255,255,0.8); width: 40px; height: 40px; border-radius: 50%; border: none; color: var(--strawberry-red); }
 .prev { left: 10px; } .next { right: 10px; }
+.bottom-actions { margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+.flex-btns { display: flex; gap: 15px; }
 
-/* 按鈕修正：解決藍色字體問題 */
-.bottom-actions { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 20px; }
-.flex-btns { display: flex; gap: 15px; justify-content: center; }
-
-.btn-secondary, .btn-wish-effect, .btn-again, .btn-confirm, .btn-more {
+.btn-secondary, .btn-wish-effect, .btn-again, .btn-more, .btn-confirm {
     font-family: 'JinXuan' !important; background: white !important;
     border: 1px solid #ddd !important; border-radius: 30px !important;
     padding: 12px 25px !important; font-weight: bold !important;
-    font-size: 1rem !important; color: #444 !important; /* 強制深灰色 */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;
-    text-decoration: none !important; display: inline-block;
+    font-size: 1rem !important; color: #444 !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important; text-decoration: none !important;
 }
-.btn-wish-effect { padding: 15px 60px !important; border-color: #ffb400 !important; margin-bottom: 5px; }
-.btn-again { background: var(--strawberry-red) !important; color: white !important; border: none !important; width: 180px; text-align: center; }
-.btn-more { width: 180px; text-align: center; }
-
-/* 結尾 LOGO */
-.finish-logo { width: 110px !important; height: auto; }
-.footer-copyright { position: absolute; bottom: 10px; width: 100%; text-align: center; font-size: 0.7rem; color: rgba(0, 0, 0, 0.4); }
+.btn-wish-effect { padding: 15px 60px !important; border-color: #ffb400 !important; }
+.btn-again { background: var(--strawberry-red) !important; color: white !important; width: 180px; text-align: center; }
+.finish-logo { width: 110px; margin-bottom: 20px; }
