@@ -2,7 +2,7 @@ const blessings = [ "天氣冷但你的床特別暖。", "手機沒電時剛好�
 
 let appData = { wish1: "", wish2: "", wishCustom: "", currentIdx: 0 };
 let holdTimer = null;
-const HOLD_TIME = 3000; // 3秒蓄力
+const HOLD_TIME = 3000;
 
 window.onload = () => {
     const candleArea = document.getElementById('candle-target');
@@ -14,19 +14,16 @@ window.onload = () => {
     const startHold = (e) => {
         if (!document.getElementById('stage-init').classList.contains('active')) return;
         e.preventDefault();
-        
         candleArea.classList.add('charging');
-        marquee.classList.add('active'); // 觸發展開跑馬燈
+        marquee.classList.add('active');
         hint.innerText = "願望凝聚中...";
-        
-        clearTimeout(holdTimer);
         holdTimer = setTimeout(startAnimation, HOLD_TIME);
     };
 
     const endHold = () => {
         clearTimeout(holdTimer);
         candleArea.classList.remove('charging');
-        marquee.classList.remove('active'); // 隱藏跑馬燈
+        marquee.classList.remove('active');
         if (document.getElementById('stage-init').classList.contains('active')) {
             hint.innerText = "按住蠟燭三秒，凝聚願望";
         }
@@ -36,14 +33,12 @@ window.onload = () => {
     candleArea.addEventListener('touchend', endHold);
     candleArea.addEventListener('mousedown', startHold);
     candleArea.addEventListener('mouseup', endHold);
-    candleArea.addEventListener('mouseleave', endHold);
 };
 
 function startAnimation() {
     const stageInit = document.getElementById('stage-init');
     stageInit.classList.remove('active');
     stageInit.classList.add('hidden');
-    
     document.getElementById('stage-main').classList.remove('hidden');
     generateSlips();
 }
@@ -72,8 +67,6 @@ function generateSlips() {
 function moveSlide(dir) {
     appData.currentIdx = (appData.currentIdx + dir + 3) % 3;
     document.getElementById('slips-slider').style.transform = `translateX(-${appData.currentIdx * 300}px)`;
-    
-    // 控制「許下願望」按鈕在第三張籤紙出現
     const btn = document.getElementById('btn-wish-trigger');
     if (appData.currentIdx === 2) btn.classList.remove('hidden-element');
     else btn.classList.add('hidden-element');
@@ -82,8 +75,7 @@ function moveSlide(dir) {
 function showInputOverlay() { document.getElementById('input-overlay').classList.remove('hidden'); }
 
 function confirmCustomWish() {
-    const val = document.getElementById('custom-wish').value.trim();
-    appData.wishCustom = val || "平安順遂";
+    appData.wishCustom = document.getElementById('custom-wish').value.trim() || "平安順遂";
     document.getElementById('input-overlay').classList.add('hidden');
     generateSlips();
 }
