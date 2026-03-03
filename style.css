@@ -1,68 +1,53 @@
-@font-face {
-    font-family: 'JinXuan';
-    src: url('jf-jinxuan-3.1-medium.otf') format('opentype');
-    font-weight: 500;
-}
+/* ... 前方的字體定義保持不變 ... */
 
-:root { --strawberry-red: #e63946; }
-
-body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #fce4ec; font-family: 'JinXuan', sans-serif; }
-
-.global-container {
-    width: 100%; height: 100%;
-    background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3)), url('cake_bg.jpg') center/cover no-repeat;
-    position: relative; display: flex; justify-content: center; align-items: center;
-}
-
-.stage { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.5s; }
-.hidden { opacity: 0; pointer-events: none; }
-
-/* 輪播區域 */
-.carousel-container {
-    display: flex; align-items: center; justify-content: center;
-    width: 100%; position: relative; margin-top: 20px;
-}
-
-.carousel-window {
-    width: 280px; height: 450px; /* 固定單一籤顯示範圍 */
-    overflow: hidden; border-radius: 15px;
-    /* 背景改為透明或配合下載背景 */
-    background: transparent;
-}
-
-.slips-slider {
-    display: flex; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-    width: 300%; /* 三張籤 */
-}
-
+/* 確保輪播中的打火機背景能正確顯示 */
 .slip {
-    width: 280px; height: 450px; flex-shrink: 0;
-    background-size: contain; background-repeat: no-repeat; background-position: center;
-    display: flex; justify-content: center;
+    width: 280px; 
+    height: 450px; 
+    flex-shrink: 0;
+    background-size: contain; 
+    background-repeat: no-repeat; 
+    background-position: center top;
+    display: flex; 
+    justify-content: center;
+    /* 增加一個過渡效果，切換時更順 */
+    transition: transform 0.3s ease;
 }
 
+/* 修正後的背景圖選擇器：確保對應到 generateSlips 產生的 class */
+.slip.green { 
+    background-image: url('打火機_G_0.jpg') !important; 
+}
+.slip.white { 
+    background-image: url('打火機_W_0.jpg') !important; 
+}
+.slip.red { 
+    background-image: url('打火機_R_0.jpg') !important; 
+}
+
+/* 為了避免背景圖跑掉，我們將文字區域固定 */
 .vertical-text {
-    writing-mode: vertical-rl; font-size: 1.1rem; letter-spacing: 2px; line-height: 1.6;
-    margin-top: 90px; max-height: 280px; color: #333;
+    writing-mode: vertical-rl;
+    font-family: 'JinXuan', serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    line-height: 1.6;
+    margin-top: 90px; /* 這裡對應打火機的透明區域 */
+    max-height: 280px;
+    color: #333;
+    pointer-events: none; /* 防止點擊到文字影響滑動 */
 }
-.slip.red .vertical-text { color: #fff; }
 
-/* 左右箭頭 */
-.nav-btn {
-    background: rgba(255,255,255,0.6); border: none; font-size: 2rem;
-    padding: 10px; cursor: pointer; color: var(--strawberry-red);
-    position: absolute; z-index: 10; border-radius: 50%; width: 50px; height: 50px;
+.slip.red .vertical-text {
+    color: #ffffff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
 }
-.prev { left: 5vw; } .next { right: 5vw; }
 
-/* 按鈕區 */
-.bottom-actions { margin-top: 30px; display: flex; flex-direction: column; gap: 15px; align-items: center; }
-.btn-main { background: var(--strawberry-red); color: white; border: none; padding: 12px 40px; border-radius: 30px; font-size: 1.1rem; }
-.flex-btns { display: flex; gap: 10px; }
-.btn-secondary { background: white; border: 1px solid #ddd; padding: 10px 20px; border-radius: 20px; color: #666; font-size: 0.9rem; }
-.hidden-element { display: none; }
-
-/* 彈窗與結束畫面與之前相同 */
-.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 100; }
-.input-box { background: white; padding: 30px; border-radius: 15px; width: 85%; max-width: 320px; }
-.finish-logo { width: 60vw; max-width: 250px; margin-bottom: 20px; }
+/* 輪播視窗：增加一點陰影讓它浮起來 */
+.carousel-window {
+    width: 280px; 
+    height: 450px; 
+    overflow: hidden; 
+    position: relative;
+    filter: drop-shadow(0 15px 30px rgba(0,0,0,0.1));
+}
