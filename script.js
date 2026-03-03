@@ -3,8 +3,6 @@ const blessings = [ "天氣冷但你的床特別暖。", "手機沒電時剛好�
 let appData = { wish1: "", wish2: "", wishCustom: "", currentIdx: 0 };
 let holdTimer = null;
 const HOLD_TIME = 3000;
-
-// 滑動偵測變數
 let touchStartX = 0;
 let touchEndX = 0;
 
@@ -14,7 +12,6 @@ window.onload = () => {
     const marquee = document.getElementById('marquee-container');
     const touchZone = document.getElementById('touch-zone');
 
-    // 1. 長按邏輯
     candleArea.oncontextmenu = (e) => { e.preventDefault(); return false; };
 
     const startHold = (e) => {
@@ -23,15 +20,18 @@ window.onload = () => {
         candleArea.classList.add('charging');
         marquee.classList.add('active');
         hint.innerText = "願望凝聚中...";
-        holdTimer = setTimeout(startAnimation, HOLD_TIME);
+        holdTimer = setTimeout(triggerExplosion, HOLD_TIME);
     };
 
     const endHold = () => {
-        clearTimeout(holdTimer);
-        candleArea.classList.remove('charging');
-        marquee.classList.remove('active');
-        if (document.getElementById('stage-init').classList.contains('active')) {
-            hint.innerText = "按住蠟燭三秒，凝聚願望";
+        if (holdTimer) {
+            clearTimeout(holdTimer);
+            holdTimer = null;
+            candleArea.classList.remove('charging');
+            marquee.classList.remove('active');
+            if (document.getElementById('stage-init').classList.contains('active')) {
+                hint.innerText = "按住蠟燭三秒，凝聚願望";
+            }
         }
     };
 
@@ -40,29 +40,41 @@ window.onload = () => {
     candleArea.addEventListener('mousedown', startHold);
     candleArea.addEventListener('mouseup', endHold);
 
-    // 2. 滑動切換邏輯
-    touchZone.addEventListener('touchstart', (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-
-    touchZone.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
-    }, { passive: true });
+    touchZone.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+    touchZone.addEventListener('touchend', (e) => { touchEndX = e.changedTouches[0].screenX; handleSwipe(); }, { passive: true });
 };
+
+// 核心爆發動畫邏輯
+function triggerExplosion() {
+    const imgOff = document.getElementById('img-off');
+    const imgOn = document.getElementById('img-on');
+    const candleArea = document.getElementById('candle-target');
+    const hint = document.getElementById('touch-hint');
+
+    // 1. 切換圖片
+    imgOff.classList.add('hidden-img');
+    imgOn.classList.remove('hidden-img');
+    
+    // 2. 加入 CSS 爆發動畫
+    imgOn.classList.add('explosion-effect');
+    hint.style.opacity = "0";
+
+    // 3. 動畫播放完畢後(0.8s)才切換到下個階段
+    setTimeout(() => {
+        startAnimation();
+    }, 800);
+}
 
 function handleSwipe() {
     const swipeDistance = touchEndX - touchStartX;
-    if (swipeDistance > 50) { // 向右滑，看前一張
-        moveSlide(-1);
-    } else if (swipeDistance < -50) { // 向左滑，看下一張
-        moveSlide(1);
-    }
+    if (swipeDistance > 50) moveSlide(-1);
+    else if (swipeDistance < -50) moveSlide(1);
 }
 
 function startAnimation() {
-    document.getElementById('stage-init').classList.remove('active');
-    document.getElementById('stage-init').classList.add('hidden');
+    const stageInit = document.getElementById('stage-init');
+    stageInit.classList.remove('active');
+    stageInit.classList.add('hidden');
     document.getElementById('stage-main').classList.remove('hidden');
     generateSlips();
 }
@@ -98,28 +110,24 @@ function moveSlide(dir) {
     if (appData.currentIdx === 2) {
         wishBtnContainer.classList.remove('hidden-element');
         wishBtn.classList.add('breathing-glow');
-        wishBtnContainer.style.height = "auto";
+        wishBtnContainer.style.visibility = "visible";
         wishBtnContainer.style.opacity = "1";
     } else {
         wishBtn.classList.remove('breathing-glow');
-        wishBtnContainer.style.height = "0";
         wishBtnContainer.style.opacity = "0";
-        // 延遲隱藏避免動畫生硬
         setTimeout(() => {
-            if (appData.currentIdx !== 2) wishBtnContainer.classList.add('hidden-element');
+            if (appData.currentIdx !== 2) wishBtnContainer.style.visibility = "hidden";
         }, 300);
     }
 }
 
 function showInputOverlay() { document.getElementById('input-overlay').classList.remove('hidden'); }
-
 function confirmCustomWish() {
     const val = document.getElementById('custom-wish').value.trim();
     appData.wishCustom = val || "平安順遂";
     document.getElementById('input-overlay').classList.add('hidden');
     generateSlips();
 }
-
 function downloadShot() {
     const zone = document.getElementById('download-zone');
     html2canvas(zone, { backgroundColor: null, scale: 3, useCORS: true }).then(canvas => {
@@ -130,10 +138,5 @@ function downloadShot() {
         document.body.appendChild(preview);
     });
 }
-
-function goToFinish() {
-    document.getElementById('stage-main').classList.add('hidden');
-    document.getElementById('stage-finish').classList.remove('hidden');
-}
-
+function goToFinish() { document.getElementById('stage-main').classList.add('hidden'); document.getElementById('stage-finish').classList.remove('hidden'); }
 function resetAll() { location.reload(); }
