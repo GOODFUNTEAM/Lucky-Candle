@@ -2,9 +2,15 @@
     font-family: 'JinXuan';
     src: url('jf-jinxuan-3.1-medium.otf') format('opentype');
 }
+
 :root { --strawberry-red: #e63946; }
+
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #fce4ec; font-family: 'JinXuan', sans-serif; }
+
+body, html { 
+    margin: 0; padding: 0; width: 100%; height: 100%; 
+    overflow: hidden; background-color: #fce4ec; font-family: 'JinXuan', sans-serif;
+}
 
 .global-container {
     width: 100%; height: 100%;
@@ -15,43 +21,74 @@ body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
 .stage { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.5s; }
 .hidden { display: none !important; }
 
-/* 初始蓄力特效 */
+/* 跑馬燈修正 */
+.marquee-wrapper {
+    position: absolute; top: 12%; left: 0; width: 100%; overflow: hidden;
+    background: rgba(230, 57, 70, 0.9); color: white; padding: 15px 0; z-index: 100;
+    opacity: 0; transition: opacity 0.5s; pointer-events: none;
+}
+.marquee-wrapper.active { opacity: 1; }
+.marquee-content {
+    display: inline-block; white-space: nowrap; font-size: 1.1rem; font-weight: bold;
+    padding-left: 100%; animation: marquee-scroll 10s linear infinite;
+}
+@keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-150%); } }
+
+/* 蠟燭蓄力 */
 .candle-container { position: relative; width: 280px; height: 280px; display: flex; justify-content: center; align-items: center; border-radius: 50%; }
 .candle-img { width: 250px; position: absolute; transition: 0.3s; z-index: 10; }
 .hidden-img { opacity: 0; pointer-events: none; }
+
 .candle-container.charging { animation: shadowGlow 3s linear forwards; }
 .candle-container.charging #img-off { animation: breathing 0.8s ease-in-out infinite; }
 @keyframes shadowGlow { 0% { box-shadow: 0 0 10px 5px rgba(255, 230, 100, 0.3); } 100% { box-shadow: 0 0 200px 100px rgba(255, 150, 0, 0.9); } }
 @keyframes breathing { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
 .explosion-effect { animation: explosion 0.8s ease-out forwards; }
 @keyframes explosion { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(2.5); } }
 
-/* 籤紙文字換行樣式 */
+/* 籤紙文字 12字換行 */
 .vertical-text {
     writing-mode: vertical-rl; position: absolute; top: 52%; left: 50%;
-    transform: translate(-50%, -50%); font-size: 1.15rem; letter-spacing: 4px;
-    color: #333; line-height: 1.8; text-align: start; 
-    display: flex; flex-direction: row-reverse; /* 確保直書從右到左換行 */
+    transform: translate(-50%, -50%); font-size: 1.2rem; letter-spacing: 4px;
+    color: #333; line-height: 2.2; text-align: start; 
+    display: flex; flex-direction: row-reverse;
 }
 
-/* 輪播與按鈕 */
-.carousel-window { width: 300px; height: 420px; overflow: hidden; position: relative; }
+/* 輪播與導航 */
+.carousel-window { width: 320px; height: 450px; overflow: hidden; position: relative; }
 .slips-slider { display: flex; transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-.slip { width: 300px; height: 420px; flex-shrink: 0; background-size: contain; background-repeat: no-repeat; background-position: center; position: relative; }
+.slip { width: 320px; height: 450px; flex-shrink: 0; background-size: contain; background-repeat: no-repeat; background-position: center; position: relative; }
 .slip.green { background-image: url('打火機_G_0.png'); }
 .slip.white { background-image: url('打火機_W_0.png'); }
 .slip.red   { background-image: url('打火機_R_0.png'); }
 
-.nav-btn { position: absolute; z-index: 20; background: rgba(255,255,255,0.9); width: 45px; height: 45px; border-radius: 50%; border: none; color: var(--strawberry-red); font-size: 1.2rem; }
-.prev { left: 10px; } .next { right: 10px; }
+.nav-btn { position: absolute; z-index: 20; background: rgba(255,255,255,0.9); width: 50px; height: 50px; border-radius: 50%; border: none; color: var(--strawberry-red); font-size: 1.5rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.prev { left: 5px; } .next { right: 5px; }
 
-.bottom-actions { margin-top: 25px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+/* 按鈕尺寸強化 cite: style.css */
+.bottom-actions { margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; }
 .flex-btns { display: flex; gap: 15px; }
-.btn-secondary, .btn-wish-effect, .btn-again, .btn-confirm { font-family: 'JinXuan' !important; background: white; border: 1px solid #ddd; border-radius: 25px; padding: 10px 22px; font-weight: bold; }
-.btn-wish-effect.breathing-glow { animation: btn-breath 1.5s ease-in-out infinite; }
-@keyframes btn-breath { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); box-shadow: 0 0 15px rgba(255, 150, 0, 0.4); } }
 
-.footer-copyright { position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 0.7rem; color: rgba(0, 0, 0, 0.4); letter-spacing: 1px; }
+.btn-secondary, .btn-wish-effect, .btn-again, .btn-confirm, .btn-ig {
+    font-family: 'JinXuan' !important;
+    background: white; border: 1px solid #ddd;
+    border-radius: 30px; padding: 12px 28px; /* 加大內距 */
+    font-size: 1.05rem; font-weight: bold; color: #444;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.btn-wish-effect { padding: 14px 60px; color: #333; border-color: #ffb400; }
+.btn-wish-effect.breathing-glow { animation: btn-breath 1.5s ease-in-out infinite; }
+@keyframes btn-breath { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 150, 0, 0.5); } }
+
+.footer-copyright { position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 0.75rem; color: rgba(0, 0, 0, 0.4); letter-spacing: 1px; }
+
+/* 結束畫面按鈕 */
+.finish-btns { display: flex; flex-direction: column; gap: 15px; width: 220px; }
+.btn-again { background: var(--strawberry-red); color: white; border: none; }
+.btn-ig { display: block; text-decoration: none; text-align: center; }
+
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 500; }
-.input-box { background: white; padding: 25px; border-radius: 15px; width: 85%; text-align: center; }
-textarea { width: 100%; height: 80px; margin-top: 15px; font-family: 'JinXuan'; }
+.input-box { background: white; padding: 30px; border-radius: 20px; width: 85%; max-width: 320px; text-align: center; }
+textarea { width: 100%; height: 100px; margin-top: 15px; font-family: 'JinXuan'; font-size: 1.1rem; padding: 10px; border-radius: 10px; border: 1px solid #ccc; }
