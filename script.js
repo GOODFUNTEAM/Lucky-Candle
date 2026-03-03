@@ -37,9 +37,10 @@ function generateSlips() {
 function moveSlide(dir) {
     appData.currentIdx = (appData.currentIdx + dir + 3) % 3;
     const slider = document.getElementById('slips-slider');
-    // 位移量必須對齊 CSS 的 300px
+    // 每次位移 300px 對齊 CSS 設定
     slider.style.transform = `translateX(-${appData.currentIdx * 300}px)`;
 
+    // 只有紅色打火機 (索引 2) 才顯示許願按鈕
     const wishBtn = document.getElementById('btn-wish-trigger');
     if (appData.currentIdx === 2) {
         wishBtn.classList.remove('hidden-element');
@@ -55,13 +56,13 @@ function confirmCustomWish() {
     appData.wishCustom = val.trim() || "平安順遂";
     document.getElementById('input-overlay').classList.add('hidden');
     generateSlips();
-    appData.currentIdx = 2; // 定位到紅色
+    appData.currentIdx = 2; // 更新完文字後定位在紅色
     moveSlide(0);
 }
 
 function downloadShot() {
     const zone = document.getElementById('download-zone');
-    html2canvas(zone, { backgroundColor: null, scale: 3 }).then(canvas => {
+    html2canvas(zone, { backgroundColor: null, scale: 3, useCORS: true }).then(canvas => {
         const link = document.createElement('a');
         link.download = `孤芳小隊-燭籤.png`;
         link.href = canvas.toDataURL();
