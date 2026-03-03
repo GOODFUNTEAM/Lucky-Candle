@@ -17,25 +17,14 @@ let appData = { wish1: "", wish2: "", wishCustom: "" };
 function startAnimation() {
     document.getElementById('stage-init').classList.add('hidden');
     document.getElementById('stage-interact').classList.remove('hidden');
-    
-    setTimeout(() => {
-        document.querySelector('.candle-split-wrapper').classList.add('open');
-    }, 100);
-
-    setTimeout(() => {
-        generateSlips('slips-container');
-    }, 1200);
-
-    setTimeout(() => {
-        document.getElementById('input-overlay').classList.remove('hidden');
-    }, 2800);
+    setTimeout(() => { document.querySelector('.candle-split-wrapper').classList.add('open'); }, 100);
+    setTimeout(() => { generateSlips('slips-container'); }, 1200);
+    setTimeout(() => { document.getElementById('input-overlay').classList.remove('hidden'); }, 3000);
 }
 
 function generateSlips(containerId) {
     const container = document.getElementById(containerId);
     container.innerHTML = "";
-    
-    // 每次生成都重新隨機選取兩張
     let shuffled = [...blessings].sort(() => 0.5 - Math.random());
     appData.wish1 = shuffled[0];
     appData.wish2 = shuffled[1];
@@ -61,7 +50,6 @@ function confirmCustomWish() {
     const val = document.getElementById('custom-wish').value;
     appData.wishCustom = val.trim() || "最後一個願望";
     document.getElementById('input-overlay').classList.add('hidden');
-    
     setTimeout(() => {
         document.getElementById('stage-interact').classList.add('hidden');
         document.getElementById('stage-summary').classList.remove('hidden');
@@ -71,12 +59,9 @@ function confirmCustomWish() {
 
 function downloadShot() {
     const zone = document.getElementById('download-zone');
-    html2canvas(zone, { 
-        backgroundColor: '#1a1a1a',
-        scale: 2 // 提高截圖清晰度
-    }).then(canvas => {
+    html2canvas(zone, { backgroundColor: '#ffffff', scale: 3 }).then(canvas => {
         const link = document.createElement('a');
-        link.download = 'LuckyCandle-孤芳小隊.png';
+        link.download = '燭籤-孤芳小隊.png';
         link.href = canvas.toDataURL();
         link.click();
     });
@@ -87,9 +72,7 @@ function wishing() {
     setTimeout(() => {
         document.getElementById('stage-summary').classList.add('hidden');
         document.getElementById('stage-finish').classList.remove('hidden');
-    }, 1300);
+    }, 1200);
 }
 
-function resetAll() {
-    location.reload();
-}
+function resetAll() { location.reload(); }
