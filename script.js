@@ -9,11 +9,12 @@ window.onload = () => {
     const touchZone = document.getElementById('touch-zone');
     const marquee = document.getElementById('marquee-container');
 
+    // 長按三秒啟動跑馬燈與火光
     const startHold = (e) => {
         if (!document.getElementById('stage-init').classList.contains('active')) return;
         e.preventDefault();
         candleArea.classList.add('charging');
-        marquee.classList.add('active'); // 長壓時顯示跑馬燈
+        marquee.classList.add('active'); // 跑馬燈出現
         document.getElementById('touch-hint').innerText = "願望凝聚中...";
         holdTimer = setTimeout(triggerExplosion, HOLD_TIME);
     };
@@ -22,7 +23,7 @@ window.onload = () => {
         clearTimeout(holdTimer);
         holdTimer = null;
         candleArea.classList.remove('charging');
-        marquee.classList.remove('active'); // 放開時隱藏跑馬燈
+        marquee.classList.remove('active'); // 跑馬燈消失
         if (document.getElementById('stage-init').classList.contains('active')) {
             document.getElementById('touch-hint').innerText = "按住蠟燭三秒，凝聚願望";
         }
@@ -33,6 +34,7 @@ window.onload = () => {
     candleArea.addEventListener('mousedown', startHold);
     candleArea.addEventListener('mouseup', endHold);
 
+    // 滑動偵測
     let touchStartX = 0;
     touchZone.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
     touchZone.addEventListener('touchend', (e) => {
@@ -42,6 +44,7 @@ window.onload = () => {
     }, { passive: true });
 };
 
+// 12 字換行邏輯
 function formatText(text) {
     let result = "";
     for (let i = 0; i < text.length; i++) {
@@ -88,7 +91,6 @@ function generateSlips() {
 
 function moveSlide(dir) {
     appData.currentIdx = (appData.currentIdx + dir + 3) % 3;
-    // 確定位移量是單張籤紙寬度 300px
     document.getElementById('slips-slider').style.transform = `translateX(-${appData.currentIdx * 300}px)`;
     const wishBtn = document.getElementById('wish-btn-container');
     if (appData.currentIdx === 2) wishBtn.classList.remove('hidden-element');
@@ -105,11 +107,15 @@ function downloadShot() {
         document.body.appendChild(preview);
     });
 }
+
 function showInputOverlay() { document.getElementById('input-overlay').classList.remove('hidden'); }
 function confirmCustomWish() {
     appData.wishCustom = document.getElementById('custom-wish').value.trim() || "平安順遂";
     document.getElementById('input-overlay').classList.add('hidden');
     generateSlips();
 }
-function goToFinish() { document.getElementById('stage-main').classList.add('hidden'); document.getElementById('stage-finish').classList.remove('hidden'); }
+function goToFinish() { 
+    document.getElementById('stage-main').classList.add('hidden'); 
+    document.getElementById('stage-finish').classList.remove('hidden'); 
+}
 function resetAll() { location.reload(); }
