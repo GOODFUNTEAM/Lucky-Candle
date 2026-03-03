@@ -6,15 +6,13 @@ const HOLD_TIME = 3000;
 
 window.onload = () => {
     const candleArea = document.getElementById('candle-target');
-    const touchZone = document.getElementById('touch-zone');
     const marquee = document.getElementById('marquee-container');
 
-    // 長按三秒啟動跑馬燈與火光
     const startHold = (e) => {
         if (!document.getElementById('stage-init').classList.contains('active')) return;
         e.preventDefault();
         candleArea.classList.add('charging');
-        marquee.classList.add('active'); // 跑馬燈出現
+        marquee.classList.add('active'); 
         document.getElementById('touch-hint').innerText = "願望凝聚中...";
         holdTimer = setTimeout(triggerExplosion, HOLD_TIME);
     };
@@ -23,7 +21,7 @@ window.onload = () => {
         clearTimeout(holdTimer);
         holdTimer = null;
         candleArea.classList.remove('charging');
-        marquee.classList.remove('active'); // 跑馬燈消失
+        marquee.classList.remove('active'); 
         if (document.getElementById('stage-init').classList.contains('active')) {
             document.getElementById('touch-hint').innerText = "按住蠟燭三秒，凝聚願望";
         }
@@ -33,18 +31,8 @@ window.onload = () => {
     candleArea.addEventListener('touchend', endHold);
     candleArea.addEventListener('mousedown', startHold);
     candleArea.addEventListener('mouseup', endHold);
-
-    // 滑動偵測
-    let touchStartX = 0;
-    touchZone.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
-    touchZone.addEventListener('touchend', (e) => {
-        let touchEndX = e.changedTouches[0].screenX;
-        if (touchEndX - touchStartX > 50) moveSlide(-1);
-        else if (touchEndX - touchStartX < -50) moveSlide(1);
-    }, { passive: true });
 };
 
-// 12 字換行邏輯
 function formatText(text) {
     let result = "";
     for (let i = 0; i < text.length; i++) {
@@ -56,9 +44,8 @@ function formatText(text) {
 
 function triggerExplosion() {
     document.getElementById('img-off').classList.add('hidden-img');
-    const imgOn = document.getElementById('img-on');
-    imgOn.classList.remove('hidden-img');
-    imgOn.classList.add('explosion-effect');
+    document.getElementById('img-on').classList.remove('hidden-img');
+    document.getElementById('img-on').classList.add('explosion-effect');
     
     setTimeout(() => {
         document.getElementById('stage-init').classList.add('hidden');
@@ -91,8 +78,9 @@ function generateSlips() {
 
 function moveSlide(dir) {
     appData.currentIdx = (appData.currentIdx + dir + 3) % 3;
-    document.getElementById('slips-slider').style.transform = `translateX(-${appData.currentIdx * 300}px)`;
+    document.getElementById('slips-slider').style.transform = `translateX(-${appData.currentIdx * 320}px)`;
     const wishBtn = document.getElementById('wish-btn-container');
+    // 只在第三張籤紙顯示許願按鈕
     if (appData.currentIdx === 2) wishBtn.classList.remove('hidden-element');
     else wishBtn.classList.add('hidden-element');
 }
@@ -102,12 +90,11 @@ function downloadShot() {
     html2canvas(zone, { scale: 3 }).then(canvas => {
         const imgData = canvas.toDataURL("image/png");
         const preview = document.createElement('div');
-        preview.style = "position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:999; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px;";
+        preview.style = "position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px;";
         preview.innerHTML = `<img src="${imgData}" style="max-width:100%; max-height:70vh; border-radius:10px;"><p style="color:white; margin-top:15px;">☝️ 長按圖片儲存</p><button onclick="document.body.removeChild(this.parentElement)" style="margin-top:15px; padding:12px 30px; border-radius:20px; border:none; background:#fff; font-family:'JinXuan'; font-weight:bold;">返回</button>`;
         document.body.appendChild(preview);
     });
 }
-
 function showInputOverlay() { document.getElementById('input-overlay').classList.remove('hidden'); }
 function confirmCustomWish() {
     appData.wishCustom = document.getElementById('custom-wish').value.trim() || "平安順遂";
