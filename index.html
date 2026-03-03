@@ -9,6 +9,7 @@
 </head>
 <body>
     <div class="global-container">
+        
         <div id="stage-init" class="stage active">
             <div id="marquee-container" class="marquee-wrapper">
                 <div class="marquee-content">您即將獲得兩個祝福及一個許願機會，請記得在籤紙上許下願望！</div>
@@ -27,18 +28,19 @@
             <div class="carousel-area" id="touch-zone">
                 <button class="nav-btn prev" onclick="moveSlide(-1)">&#10094;</button>
                 <div id="download-zone" class="carousel-window">
-                    <div id="slips-slider" class="slips-slider"></div>
+                    <div id="slips-slider" class="slips-slider">
+                        </div>
                 </div>
                 <button class="nav-btn next" onclick="moveSlide(1)">&#10095;</button>
             </div>
 
             <div class="bottom-actions">
-                <div id="wish-btn-container" class="btn-wish-wrapper hidden-element">
-                    <button class="btn-wish-effect" onclick="showInputOverlay()">許下願望</button>
-                </div>
                 <div class="flex-btns">
                     <button onclick="downloadShot()" class="btn-secondary">儲存此籤</button>
                     <button onclick="goToFinish()" class="btn-secondary">送出願望</button>
+                </div>
+                <div id="wish-btn-container" class="btn-wish-wrapper hidden-element">
+                    <button class="btn-wish-effect" onclick="showInputOverlay()">許下願望</button>
                 </div>
             </div>
 
