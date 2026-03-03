@@ -17,9 +17,24 @@ let appData = { wish1: "", wish2: "", wishCustom: "" };
 function startAnimation() {
     document.getElementById('stage-init').classList.add('hidden');
     document.getElementById('stage-interact').classList.remove('hidden');
+    
+    // 蠟燭裂開
     setTimeout(() => { document.querySelector('.candle-split-wrapper').classList.add('open'); }, 100);
-    setTimeout(() => { generateSlips('slips-container'); }, 1200);
-    setTimeout(() => { document.getElementById('input-overlay').classList.remove('hidden'); }, 3000);
+    
+    // 生成打火機
+    setTimeout(() => { generateSlips('slips-container'); }, 1000);
+
+    // 顯示「許下願望」按鈕，但不自動彈出輸入框
+    setTimeout(() => {
+        const btn = document.getElementById('btn-trigger-input');
+        btn.classList.remove('hidden-element');
+        btn.style.opacity = "1";
+        btn.style.pointerEvents = "auto";
+    }, 2200);
+}
+
+function showInputOverlay() {
+    document.getElementById('input-overlay').classList.remove('hidden');
 }
 
 function generateSlips(containerId) {
@@ -32,7 +47,7 @@ function generateSlips(containerId) {
     const config = [
         { class: 'green', text: appData.wish1 },
         { class: 'white', text: appData.wish2 },
-        { class: 'red',   text: appData.wishCustom || "點擊輸入願望" }
+        { class: 'red',   text: appData.wishCustom || "點擊按鈕許願" }
     ];
 
     config.forEach(item => {
@@ -48,8 +63,9 @@ function generateSlips(containerId) {
 
 function confirmCustomWish() {
     const val = document.getElementById('custom-wish').value;
-    appData.wishCustom = val.trim() || "最後一個願望";
+    appData.wishCustom = val.trim() || "平安順遂";
     document.getElementById('input-overlay').classList.add('hidden');
+    
     setTimeout(() => {
         document.getElementById('stage-interact').classList.add('hidden');
         document.getElementById('stage-summary').classList.remove('hidden');
@@ -67,12 +83,13 @@ function downloadShot() {
     });
 }
 
-function wishing() {
+function goToFinish() {
+    // 籤詩飛走動畫
     document.getElementById('final-slips').classList.add('fly-away');
     setTimeout(() => {
         document.getElementById('stage-summary').classList.add('hidden');
         document.getElementById('stage-finish').classList.remove('hidden');
-    }, 1200);
+    }, 1000);
 }
 
 function resetAll() { location.reload(); }
