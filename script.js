@@ -36,9 +36,8 @@ window.onload = () => {
 };
 
 function startAnimation() {
-    const stageInit = document.getElementById('stage-init');
-    stageInit.classList.remove('active');
-    stageInit.classList.add('hidden');
+    document.getElementById('stage-init').classList.remove('active');
+    document.getElementById('stage-init').classList.add('hidden');
     document.getElementById('stage-main').classList.remove('hidden');
     generateSlips();
 }
@@ -67,15 +66,24 @@ function generateSlips() {
 function moveSlide(dir) {
     appData.currentIdx = (appData.currentIdx + dir + 3) % 3;
     document.getElementById('slips-slider').style.transform = `translateX(-${appData.currentIdx * 300}px)`;
-    const btn = document.getElementById('btn-wish-trigger');
-    if (appData.currentIdx === 2) btn.classList.remove('hidden-element');
-    else btn.classList.add('hidden-element');
+    
+    const wishBtnContainer = document.getElementById('wish-btn-container');
+    const wishBtn = document.querySelector('.btn-wish-effect');
+
+    if (appData.currentIdx === 2) {
+        wishBtnContainer.classList.remove('hidden-element');
+        wishBtn.classList.add('breathing-glow');
+    } else {
+        wishBtnContainer.classList.add('hidden-element');
+        wishBtn.classList.remove('breathing-glow');
+    }
 }
 
 function showInputOverlay() { document.getElementById('input-overlay').classList.remove('hidden'); }
 
 function confirmCustomWish() {
-    appData.wishCustom = document.getElementById('custom-wish').value.trim() || "平安順遂";
+    const val = document.getElementById('custom-wish').value.trim();
+    appData.wishCustom = val || "平安順遂";
     document.getElementById('input-overlay').classList.add('hidden');
     generateSlips();
 }
@@ -86,7 +94,7 @@ function downloadShot() {
         const imgData = canvas.toDataURL("image/png");
         const preview = document.createElement('div');
         preview.style = "position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:999; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px;";
-        preview.innerHTML = `<img src="${imgData}" style="max-width:100%; max-height:70vh; border-radius:10px;"><p style="color:white; margin-top:15px; font-family:sans-serif;">☝️ 長按圖片儲存至相簿</p><button onclick="document.body.removeChild(this.parentElement)" style="margin-top:15px; padding:10px 30px; border-radius:20px; border:none; background:#fff; color:#333; font-weight:bold;">返回網頁</button>`;
+        preview.innerHTML = `<img src="${imgData}" style="max-width:100%; max-height:70vh; border-radius:10px;"><p style="color:white; margin-top:15px; font-family:sans-serif;">☝️ 長按圖片儲存至相簿</p><button onclick="document.body.removeChild(this.parentElement)" style="margin-top:15px; padding:10px 30px; border-radius:20px; border:none; background:#fff; color:#333; font-weight:bold; font-family:'JinXuan';">返回網頁</button>`;
         document.body.appendChild(preview);
     });
 }
