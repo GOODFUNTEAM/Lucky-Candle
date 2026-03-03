@@ -13,9 +13,12 @@
             <div id="marquee-container" class="marquee-wrapper">
                 <div class="marquee-content">您即將獲得兩個祝福及一個許願機會，請記得在籤紙上許下願望！</div>
             </div>
+            
             <div class="candle-container" id="candle-target">
-                <img src="candle_full.png" alt="燭籤" class="full-candle">
+                <img src="candle_off.png" alt="未開啟蠟燭" class="candle-img" id="img-off">
+                <img src="candle_on.png" alt="開啟蠟燭" class="candle-img hidden-img" id="img-on">
             </div>
+            
             <p class="hint" id="touch-hint">按住蠟燭三秒，凝聚願望</p>
         </div>
 
@@ -27,18 +30,15 @@
                 </div>
                 <button class="nav-btn next" onclick="moveSlide(1)">&#10095;</button>
             </div>
-
             <div class="bottom-actions">
                 <div class="flex-btns">
                     <button onclick="downloadShot()" class="btn-secondary">儲存此籤</button>
                     <button onclick="goToFinish()" class="btn-secondary">送出願望</button>
                 </div>
-                
                 <div id="wish-btn-container" class="btn-wish-wrapper hidden-element">
                     <button class="btn-wish-effect" onclick="showInputOverlay()">許下願望</button>
                 </div>
             </div>
-
             <div id="input-overlay" class="overlay hidden">
                 <div class="input-box">
                     <h3 style="font-family:'JinXuan';">最後一個願望，留給自己</h3>
