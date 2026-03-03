@@ -10,21 +10,20 @@
 <body>
     <div class="global-container">
         <div id="stage-init" class="stage active">
-            <div class="candle-wrapper">
-                <img src="candle_full.png" alt="燭籤" class="full-candle">
+            <div class="candle-container">
+                <div id="glow-effect" class="glow-circle"></div>
+                <img src="candle_full.png" alt="燭籤" class="full-candle" id="main-candle">
             </div>
-            <p class="hint">按住蠟燭五秒，凝聚願望</p>
+            <p class="hint" id="touch-hint">按住蠟燭五秒，凝聚願望</p>
         </div>
 
         <div id="stage-main" class="stage hidden">
-            <div class="carousel-container">
+            <div class="carousel-area">
                 <button class="nav-btn prev" onclick="moveSlide(-1)">&#10094;</button>
-                
                 <div id="download-zone" class="carousel-window">
                     <div id="slips-slider" class="slips-slider">
                         </div>
                 </div>
-
                 <button class="nav-btn next" onclick="moveSlide(1)">&#10095;</button>
             </div>
 
