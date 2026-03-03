@@ -1,117 +1,81 @@
-const blessings = [ "天氣冷但你的床特別暖。", "手機沒電時剛好有插座。", "USB 插第一下就對。", "滑倒時沒人看到。", "隨機播放到想聽的音樂。", "想出門時天氣剛好轉晴。", "通勤路上一路綠燈。", "搭車都有位子。", "摩托車永遠有好車位停。", "下班時間永遠準點。", "提案一次過。", "公車司機願意多等你三秒。", "點外送永遠沒漏單。", "吃薯條永遠是脆的那包。", "買鹽酥雞永遠多送一塊。", "喜歡的人主動問你在幹嘛。" ];
+@font-face {
+    font-family: 'JinXuan';
+    src: url('jf-jinxuan-3.1-medium.otf') format('opentype');
+}
+:root { --strawberry-red: #e63946; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #fce4ec; font-family: 'JinXuan', sans-serif; }
 
-let appData = { wish1: "", wish2: "", wishCustom: "", currentIdx: 0 };
-let holdTimer = null;
-const HOLD_TIME = 3000;
-
-window.onload = () => {
-    const candleArea = document.getElementById('candle-target');
-    const touchZone = document.getElementById('touch-zone');
-    const marquee = document.getElementById('marquee-container');
-
-    const startHold = (e) => {
-        if (!document.getElementById('stage-init').classList.contains('active')) return;
-        e.preventDefault();
-        candleArea.classList.add('charging');
-        marquee.classList.add('active'); 
-        document.getElementById('touch-hint').innerText = "願望凝聚中...";
-        holdTimer = setTimeout(triggerExplosion, HOLD_TIME);
-    };
-
-    const endHold = () => {
-        clearTimeout(holdTimer);
-        holdTimer = null;
-        candleArea.classList.remove('charging');
-        marquee.classList.remove('active'); 
-        if (document.getElementById('stage-init').classList.contains('active')) {
-            document.getElementById('touch-hint').innerText = "按住蠟燭三秒，凝聚願望";
-        }
-    };
-
-    candleArea.addEventListener('touchstart', startHold, { passive: false });
-    candleArea.addEventListener('touchend', endHold);
-    candleArea.addEventListener('mousedown', startHold);
-    candleArea.addEventListener('mouseup', endHold);
-
-    let touchStartX = 0;
-    touchZone.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
-    touchZone.addEventListener('touchend', (e) => {
-        let touchEndX = e.changedTouches[0].screenX;
-        if (touchEndX - touchStartX > 50) moveSlide(-1);
-        else if (touchEndX - touchStartX < -50) moveSlide(1);
-    }, { passive: true });
-};
-
-function formatText(text) {
-    let result = "";
-    for (let i = 0; i < text.length; i++) {
-        result += text[i];
-        if ((i + 1) % 12 === 0) result += "\n";
-    }
-    return result;
+.global-container {
+    width: 100%; height: 100%; position: relative;
+    background: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)), url('cake_bg.jpg') center/cover no-repeat;
+    display: flex; justify-content: center; align-items: center;
 }
 
-function triggerExplosion() {
-    document.getElementById('img-off').classList.add('hidden-img');
-    const imgOn = document.getElementById('img-on');
-    imgOn.classList.remove('hidden-img');
-    imgOn.classList.add('explosion-effect');
-    
-    setTimeout(() => {
-        document.getElementById('stage-init').classList.add('hidden');
-        document.getElementById('stage-init').classList.remove('active');
-        document.getElementById('stage-main').classList.remove('hidden');
-        generateSlips();
-    }, 800);
+.stage { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 60px 0; }
+.hidden { display: none !important; }
+
+/* 跑馬燈樣式修正 */
+.marquee-wrapper {
+    position: fixed; top: 12%; left: 0; width: 100%; overflow: hidden;
+    background: rgba(230, 57, 70, 0.95); color: white; padding: 12px 0; z-index: 1000;
+    display: none;
+}
+.marquee-wrapper.active { display: block; }
+.marquee-content { display: inline-block; white-space: nowrap; font-size: 1.1rem; font-weight: bold; padding-left: 100%; animation: marquee-scroll 10s linear infinite; }
+@keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-150%); } }
+
+/* 蠟燭置中 */
+.candle-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.candle-container { position: relative; width: 280px; height: 280px; display: flex; justify-content: center; align-items: center; }
+.candle-img { width: 260px; height: auto; transition: transform 0.3s ease; }
+.hidden-img { display: none; }
+
+.candle-container.charging { animation: shadowGlow 3s linear forwards; }
+.candle-container.charging .candle-img { animation: breathe 0.8s ease-in-out infinite; }
+@keyframes shadowGlow { 0% { box-shadow: 0 0 10px 5px rgba(255, 230, 100, 0.2); } 100% { box-shadow: 0 0 150px 70px rgba(255, 150, 0, 0.8); border-radius: 50%; } }
+@keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+/* 輪播區塊 */
+.carousel-area { position: relative; width: 100%; display: flex; justify-content: center; align-items: center; margin-top: 20px; }
+.carousel-window { width: 320px; height: 450px; overflow: hidden; border-radius: 15px; }
+.slips-slider { display: flex; transition: transform 0.5s ease-out; width: 960px; }
+.slip { width: 320px; height: 450px; flex-shrink: 0; background-size: contain; background-repeat: no-repeat; background-position: center; position: relative; }
+.slip.green { background-image: url('打火機_G_0.png'); }
+.slip.white { background-image: url('打火機_W_0.png'); }
+.slip.red   { background-image: url('打火機_R_0.png'); }
+
+.vertical-text {
+    writing-mode: vertical-rl; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); font-size: 1.2rem; letter-spacing: 4px;
+    color: #333 !important; line-height: 2.2; text-align: start; white-space: pre;
+    display: flex; flex-direction: row-reverse;
 }
 
-function generateSlips() {
-    const slider = document.getElementById('slips-slider');
-    slider.innerHTML = "";
-    if (!appData.wish1) {
-        let shuffled = [...blessings].sort(() => 0.5 - Math.random());
-        appData.wish1 = shuffled[0]; appData.wish2 = shuffled[1];
-    }
-    const config = [
-        { cl: 'green', text: appData.wish1 },
-        { cl: 'white', text: appData.wish2 },
-        { cl: 'red',   text: appData.wishCustom || "點擊按鈕許願" }
-    ];
-    config.forEach(item => {
-        const div = document.createElement('div');
-        div.className = `slip ${item.cl}`;
-        div.innerHTML = `<span class="vertical-text">${formatText(item.text)}</span>`;
-        slider.appendChild(div);
-    });
-    moveSlide(0);
+/* 導航箭頭修正 */
+.nav-btn {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 50;
+    background: rgba(255,255,255,0.8); width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid #eee; color: var(--strawberry-red); font-size: 1rem;
 }
+.prev { left: 10px; } .next { right: 10px; }
 
-function moveSlide(dir) {
-    appData.currentIdx = (appData.currentIdx + dir + 3) % 3;
-    document.getElementById('slips-slider').style.transform = `translateX(-${appData.currentIdx * 300}px)`;
-    const wishBtn = document.getElementById('wish-btn-container');
-    if (appData.currentIdx === 2) wishBtn.classList.remove('hidden-element');
-    else wishBtn.classList.add('hidden-element');
-}
+/* 按鈕修正：解決藍色字體問題 */
+.bottom-actions { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 20px; }
+.flex-btns { display: flex; gap: 15px; justify-content: center; }
 
-function downloadShot() {
-    const zone = document.getElementById('download-zone');
-    html2canvas(zone, { scale: 3 }).then(canvas => {
-        const imgData = canvas.toDataURL("image/png");
-        const preview = document.createElement('div');
-        preview.style = "position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:999; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px;";
-        preview.innerHTML = `<img src="${imgData}" style="max-width:100%; max-height:70vh; border-radius:10px;"><p style="color:white; margin-top:15px;">☝️ 長按圖片儲存</p><button onclick="document.body.removeChild(this.parentElement)" style="margin-top:15px; padding:12px 30px; border-radius:20px; border:none; background:#fff; font-family:'JinXuan'; font-weight:bold;">返回</button>`;
-        document.body.appendChild(preview);
-    });
+.btn-secondary, .btn-wish-effect, .btn-again, .btn-confirm, .btn-more {
+    font-family: 'JinXuan' !important; background: white !important;
+    border: 1px solid #ddd !important; border-radius: 30px !important;
+    padding: 12px 25px !important; font-weight: bold !important;
+    font-size: 1rem !important; color: #444 !important; /* 強制深灰色 */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;
+    text-decoration: none !important; display: inline-block;
 }
-function showInputOverlay() { document.getElementById('input-overlay').classList.remove('hidden'); }
-function confirmCustomWish() {
-    appData.wishCustom = document.getElementById('custom-wish').value.trim() || "平安順遂";
-    document.getElementById('input-overlay').classList.add('hidden');
-    generateSlips();
-}
-function goToFinish() { 
-    document.getElementById('stage-main').classList.add('hidden'); 
-    document.getElementById('stage-finish').classList.remove('hidden'); 
-}
-function resetAll() { location.reload(); }
+.btn-wish-effect { padding: 15px 60px !important; border-color: #ffb400 !important; margin-bottom: 5px; }
+.btn-again { background: var(--strawberry-red) !important; color: white !important; border: none !important; width: 180px; text-align: center; }
+.btn-more { width: 180px; text-align: center; }
+
+/* 結尾 LOGO */
+.finish-logo { width: 110px !important; height: auto; }
+.footer-copyright { position: absolute; bottom: 10px; width: 100%; text-align: center; font-size: 0.7rem; color: rgba(0, 0, 0, 0.4); }
