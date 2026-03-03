@@ -4,11 +4,17 @@ let appData = { wish1: "", wish2: "", wishCustom: "", currentIdx: 0 };
 let holdTimer = null;
 const HOLD_TIME = 3000;
 
+// 滑動偵測變數
+let touchStartX = 0;
+let touchEndX = 0;
+
 window.onload = () => {
     const candleArea = document.getElementById('candle-target');
     const hint = document.getElementById('touch-hint');
     const marquee = document.getElementById('marquee-container');
+    const touchZone = document.getElementById('touch-zone');
 
+    // 1. 長按邏輯
     candleArea.oncontextmenu = (e) => { e.preventDefault(); return false; };
 
     const startHold = (e) => {
@@ -33,7 +39,26 @@ window.onload = () => {
     candleArea.addEventListener('touchend', endHold);
     candleArea.addEventListener('mousedown', startHold);
     candleArea.addEventListener('mouseup', endHold);
+
+    // 2. 滑動切換邏輯
+    touchZone.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    touchZone.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
 };
+
+function handleSwipe() {
+    const swipeDistance = touchEndX - touchStartX;
+    if (swipeDistance > 50) { // 向右滑，看前一張
+        moveSlide(-1);
+    } else if (swipeDistance < -50) { // 向左滑，看下一張
+        moveSlide(1);
+    }
+}
 
 function startAnimation() {
     document.getElementById('stage-init').classList.remove('active');
@@ -73,9 +98,16 @@ function moveSlide(dir) {
     if (appData.currentIdx === 2) {
         wishBtnContainer.classList.remove('hidden-element');
         wishBtn.classList.add('breathing-glow');
+        wishBtnContainer.style.height = "auto";
+        wishBtnContainer.style.opacity = "1";
     } else {
-        wishBtnContainer.classList.add('hidden-element');
         wishBtn.classList.remove('breathing-glow');
+        wishBtnContainer.style.height = "0";
+        wishBtnContainer.style.opacity = "0";
+        // 延遲隱藏避免動畫生硬
+        setTimeout(() => {
+            if (appData.currentIdx !== 2) wishBtnContainer.classList.add('hidden-element');
+        }, 300);
     }
 }
 
