@@ -5,11 +5,16 @@
 
 :root { --strawberry-red: #e63946; }
 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+* { 
+    box-sizing: border-box; 
+    -webkit-tap-highlight-color: transparent; 
+    touch-action: manipulation; 
+}
 
 body, html { 
     margin: 0; padding: 0; width: 100%; height: 100%; 
-    overflow: hidden; background-color: #fce4ec; font-family: 'JinXuan', sans-serif;
+    overflow: hidden; background-color: #fce4ec; 
+    font-family: 'JinXuan', sans-serif; /* 全域字體設定 */
 }
 
 .global-container {
@@ -24,8 +29,7 @@ body, html {
 /* 跑馬燈 */
 .marquee-wrapper {
     position: absolute; top: 60px; left: 0; width: 100%; overflow: hidden;
-    background: rgba(230, 57, 70, 0.9); color: white; padding: 12px 0;
-    z-index: 100; display: none;
+    background: rgba(230, 57, 70, 0.9); color: white; padding: 12px 0; z-index: 100; display: none;
 }
 .marquee-wrapper.active { display: block; }
 .marquee-content {
@@ -34,35 +38,30 @@ body, html {
 }
 @keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-200%); } }
 
-/* 初始蠟燭加大 */
+/* 初始蠟燭 */
 .candle-container { 
-    position: relative; width: 280px; height: 280px; /* 從 200 放大到 280 */
+    position: relative; width: 280px; height: 280px; 
     display: flex; justify-content: center; align-items: center; border-radius: 50%;
 }
 .full-candle { width: 250px; z-index: 10; pointer-events: none; transition: transform 0.3s; }
 
-/* 蓄力效果 (3秒) */
+/* 蓄力與呼吸動畫 */
 .candle-container.charging { animation: shadowGlow 3s linear forwards; }
 .candle-container.charging .full-candle { animation: breathing 0.8s ease-in-out infinite; }
-
-@keyframes shadowGlow {
-    0% { box-shadow: 0 0 10px 5px rgba(255, 230, 100, 0.4); }
-    100% { box-shadow: 0 0 180px 80px rgba(255, 150, 0, 0.9); }
-}
+@keyframes shadowGlow { 0% { box-shadow: 0 0 10px 5px rgba(255, 230, 100, 0.4); } 100% { box-shadow: 0 0 180px 80px rgba(255, 150, 0, 0.9); } }
 @keyframes breathing { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
-.hint { margin-top: 30px; color: var(--strawberry-red); font-weight: bold; letter-spacing: 1px; font-size: 1.1rem; }
+.hint { margin-top: 30px; color: var(--strawberry-red); font-weight: bold; font-size: 1.1rem; }
 
-/* 籤紙文字優化：增加寬度容納更多字 */
+/* 籤文字 */
 .vertical-text {
     writing-mode: vertical-rl; position: absolute; top: 52%; left: 50%;
     transform: translate(-50%, -50%); font-size: 1.15rem; letter-spacing: 3px;
-    color: #333; max-height: 280px; /* 增加高度讓每行容納更多字 */
-    line-height: 1.8; text-align: center;
+    color: #333; max-height: 280px; line-height: 1.8; text-align: center;
+    font-family: 'JinXuan', sans-serif;
 }
 
-/* 輪播與按鈕 */
-.carousel-area { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; }
+/* 輪播區 */
 .carousel-window { width: 300px; height: 420px; overflow: hidden; position: relative; }
 .slips-slider { display: flex; transition: transform 0.5s ease-in-out; }
 .slip { width: 300px; height: 420px; flex-shrink: 0; background-size: contain; background-repeat: no-repeat; background-position: center; position: relative; display: flex; justify-content: center; }
@@ -73,20 +72,48 @@ body, html {
 .nav-btn { position: absolute; z-index: 20; background: rgba(255,255,255,0.95); width: 45px; height: 45px; border-radius: 50%; border: none; color: var(--strawberry-red); box-shadow: 0 4px 10px rgba(0,0,0,0.1); font-size: 1.2rem; }
 .prev { left: 10px; } .next { right: 10px; }
 
-.bottom-actions { margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+/* --- 按鈕風格統一區 --- */
+.bottom-actions { margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
 
-/* 結束畫面按鈕排版 */
-.finish-btns { display: flex; flex-direction: column; gap: 15px; width: 200px; }
+/* 通用按鈕字體設定 */
+.btn-secondary, .btn-ig, .btn-again, .btn-main, .btn-confirm, .btn-wish-effect {
+    font-family: 'JinXuan', sans-serif !important;
+    letter-spacing: 1px;
+}
+
+/* 許下願望按鈕 (特別加入呼吸動畫) */
+.btn-wish-wrapper { margin-bottom: 5px; }
+.btn-wish-effect {
+    font-size: 1.1rem; font-weight: bold; color: #555;
+    background-color: white; border: 1px solid #ddd;
+    padding: 10px 35px; border-radius: 25px; cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.btn-wish-effect.breathing-glow { animation: btn-breath 1.5s ease-in-out infinite; }
+@keyframes btn-breath {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 200, 50, 0.4); }
+    50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 150, 0, 0.7); }
+}
+
+/* 儲存此籤 & 送出願望 */
+.flex-btns { display: flex; gap: 10px; }
+.btn-secondary {
+    background: white; border: 1px solid #ddd; padding: 10px 20px;
+    border-radius: 25px; color: #555; font-size: 0.95rem; font-weight: bold;
+}
+
+/* 結束畫面按鈕 */
+.finish-btns { display: flex; flex-direction: column; gap: 12px; width: 180px; }
+.btn-again { background: var(--strawberry-red); color: white; border: none; padding: 12px 0; border-radius: 25px; font-weight: bold; font-size: 1rem; }
 .btn-ig { 
     display: block; text-decoration: none; text-align: center;
-    background: white; color: #555; border: 1px solid #ddd; 
-    padding: 12px 0; border-radius: 25px; font-weight: bold; 
+    background: white; color: #555; border: 1px solid #ddd; padding: 12px 0; border-radius: 25px; font-weight: bold; 
 }
-.btn-again, .btn-main, .btn-confirm { background: var(--strawberry-red); color: white; border: none; padding: 12px 0; border-radius: 25px; font-size: 1.05rem; font-weight: bold; width: 100%; }
 
 .finish-logo { width: 160px; height: auto; margin-bottom: 20px; }
-.finish-text { font-size: 1.25rem; color: #444; margin-bottom: 30px; }
+.finish-text { font-size: 1.2rem; color: #444; margin-bottom: 25px; }
 .hidden-element { display: none !important; }
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 500; }
 .input-box { background: white; padding: 25px; border-radius: 15px; width: 85%; max-width: 300px; text-align: center; }
-textarea { width: 100%; height: 80px; margin: 15px 0; font-size: 1rem; }
+.btn-confirm { background: var(--strawberry-red); color: white; border: none; padding: 10px 30px; border-radius: 20px; width: 100%; margin-top: 10px; font-weight: bold; }
+textarea { width: 100%; height: 80px; margin: 15px 0; font-family: 'JinXuan', sans-serif; font-size: 1rem; }
