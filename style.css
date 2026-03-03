@@ -33,67 +33,56 @@ body, html {
 }
 @keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-200%); } }
 
-/* 初始蠟燭 */
+/* 蠟燭容器與呼吸效果 */
 .candle-container { position: relative; width: 280px; height: 280px; display: flex; justify-content: center; align-items: center; }
-.full-candle { width: 250px; z-index: 10; pointer-events: none; }
+.candle-img { width: 250px; position: absolute; transition: 0.3s; z-index: 10; }
+.hidden-img { opacity: 0; pointer-events: none; }
+
+/* 蓄力中：光暈變大 + 呼吸 */
 .candle-container.charging { animation: shadowGlow 3s linear forwards; }
-.candle-container.charging .full-candle { animation: breathing 0.8s ease-in-out infinite; }
-@keyframes shadowGlow { 0% { box-shadow: 0 0 10px 5px rgba(255, 230, 100, 0.4); } 100% { box-shadow: 0 0 180px 80px rgba(255, 150, 0, 0.9); } }
+.candle-container.charging #img-off { animation: breathing 0.8s ease-in-out infinite; }
+
+@keyframes shadowGlow {
+    0% { box-shadow: 0 0 10px 5px rgba(255, 230, 100, 0.3); }
+    100% { box-shadow: 0 0 200px 100px rgba(255, 150, 0, 0.9); }
+}
 @keyframes breathing { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
-.hint { margin-top: 30px; color: var(--strawberry-red); font-weight: bold; font-size: 1.1rem; }
-
-/* 籤內容排版 */
-.vertical-text {
-    writing-mode: vertical-rl; position: absolute; top: 52%; left: 50%;
-    transform: translate(-50%, -50%); font-size: 1.15rem; letter-spacing: 3px;
-    color: #333; max-height: 280px; line-height: 1.8; text-align: center;
+/* 關鍵爆發動畫：透明度100%變0% 同時放大 */
+.explosion-effect {
+    animation: explosion 0.8s ease-out forwards;
 }
 
-/* 輪播 */
+@keyframes explosion {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(2.5); } /* 放大並消失 */
+}
+
+/* 其餘樣式維持... */
+.hint { margin-top: 30px; color: var(--strawberry-red); font-weight: bold; font-size: 1.1rem; }
+.vertical-text { writing-mode: vertical-rl; position: absolute; top: 52%; left: 50%; transform: translate(-50%, -50%); font-size: 1.15rem; letter-spacing: 3px; color: #333; max-height: 280px; line-height: 1.8; text-align: center; }
 .carousel-window { width: 300px; height: 420px; overflow: hidden; position: relative; }
 .slips-slider { display: flex; transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
 .slip { width: 300px; height: 420px; flex-shrink: 0; background-size: contain; background-repeat: no-repeat; background-position: center; position: relative; }
 .slip.green { background-image: url('打火機_G_0.png'); }
 .slip.white { background-image: url('打火機_W_0.png'); }
 .slip.red   { background-image: url('打火機_R_0.png'); }
-
 .nav-btn { position: absolute; z-index: 20; background: rgba(255,255,255,0.9); width: 45px; height: 45px; border-radius: 50%; border: none; color: var(--strawberry-red); box-shadow: 0 4px 10px rgba(0,0,0,0.1); font-size: 1.2rem; }
 .prev { left: 10px; } .next { right: 10px; }
-
-/* 底部按鈕區 */
 .bottom-actions { margin-top: 25px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .flex-btns { display: flex; gap: 15px; }
-
-/* 通用按鈕風格 (鎖定字體) */
-.btn-secondary, .btn-wish-effect, .btn-again, .btn-ig, .btn-confirm {
-    font-family: 'JinXuan', sans-serif !important;
-    background: white; border: 1px solid #ddd;
-    border-radius: 25px; color: #555; font-weight: bold;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
+.btn-secondary, .btn-wish-effect, .btn-again, .btn-ig, .btn-confirm { font-family: 'JinXuan', sans-serif !important; background: white; border: 1px solid #ddd; border-radius: 25px; color: #555; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
 .btn-secondary { padding: 10px 22px; font-size: 0.95rem; }
-
-/* 下方的許下願望按鈕 */
 .btn-wish-wrapper { margin-top: 5px; }
-.btn-wish-effect {
-    padding: 12px 50px; font-size: 1.1rem; color: #333;
-}
+.btn-wish-effect { padding: 12px 50px; font-size: 1.1rem; color: #333; }
 .btn-wish-effect.breathing-glow { animation: btn-breath 1.5s ease-in-out infinite; }
-@keyframes btn-breath {
-    0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 200, 50, 0.3); }
-    50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 150, 0, 0.5); border-color: rgba(255, 150, 0, 0.4); }
-}
-
-/* 結束畫面 */
+@keyframes btn-breath { 0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 200, 50, 0.3); } 50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 150, 0, 0.5); } }
 .finish-btns { display: flex; flex-direction: column; gap: 12px; width: 180px; }
 .btn-again { background: var(--strawberry-red); color: white; border: none; padding: 12px 0; font-size: 1rem; }
 .btn-ig { display: block; text-decoration: none; text-align: center; padding: 12px 0; }
-
 .finish-logo { width: 160px; height: auto; margin-bottom: 20px; }
 .finish-text { font-size: 1.2rem; color: #444; margin-bottom: 25px; }
-.hidden-element { visibility: hidden; opacity: 0; height: 0; overflow: hidden; margin: 0; transition: 0.3s; }
+.hidden-element { visibility: hidden; opacity: 0; height: 0; overflow: hidden; margin: 0; }
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 500; }
 .input-box { background: white; padding: 25px; border-radius: 15px; width: 85%; max-width: 300px; text-align: center; }
 textarea { width: 100%; height: 80px; margin: 15px 0; font-family: 'JinXuan'; font-size: 1rem; border-radius: 8px; border: 1px solid #ddd; padding: 10px; }
