@@ -5,96 +5,50 @@
 }
 
 :root {
-    --cake-white: #fffcf7;
     --strawberry-red: #e63946;
-    --shadow-color: rgba(0, 0, 0, 0.1);
 }
-
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 body {
-    background-color: #fce4ec;
-    background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3)), 
-                url('cake_bg.jpg') center/cover no-repeat;
-    color: #444;
+    background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3)), url('cake_bg.jpg') center/cover no-repeat;
     font-family: 'JinXuan', sans-serif;
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+    margin: 0; height: 100vh; overflow: hidden;
+    display: flex; justify-content: center; align-items: center;
 }
 
-.global-container { width: 100%; height: 100%; position: relative; }
+.stage { position: absolute; width: 100%; top: 50%; left: 50%; transform: translate(-50%, -50%); transition: 0.8s; text-align: center; }
+.hidden { opacity: 0; pointer-events: none; transform: translate(-50%, -45%); }
+.hidden-element { opacity: 0; pointer-events: none; }
 
-.stage { 
-    position: absolute; width: 100%; top: 50%; left: 50%; 
-    transform: translate(-50%, -50%); transition: all 0.8s ease; 
-    padding: 0 10px; text-align: center;
+/* 初始大蠟燭 */
+.full-candle { width: 45vw; max-width: 180px; filter: drop-shadow(0 8px 20px rgba(230, 57, 70, 0.4)); animation: float 3s infinite ease-in-out; }
+
+/* 許下願望按鈕樣式 */
+.trigger-box { margin-top: 40px; height: 50px; }
+.btn-main { 
+    background: var(--strawberry-red); color: white; border: none; 
+    padding: 12px 35px; border-radius: 30px; font-family: 'JinXuan';
+    font-size: 1.1rem; cursor: pointer; transition: 0.5s;
+    box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3);
 }
 
-.hidden { opacity: 0; transform: translate(-50%, -45%); pointer-events: none; }
-
-/* --- 這裡優化了初始蠟燭的大小 --- */
-.full-candle { 
-    width: 45vw; /* 從 25vw 放大到 45vw */
-    max-width: 180px; /* 從 100px 放大到 180px */
-    cursor: pointer;
-    filter: drop-shadow(0 8px 20px rgba(230, 57, 70, 0.5)); 
-    animation: float 3s infinite ease-in-out; 
+/* 結束畫面風格 */
+.finish-logo { width: 60vw; max-width: 250px; margin-bottom: 20px; }
+.finish-text { 
+    font-size: 1.4rem; color: #444; letter-spacing: 2px; 
+    text-shadow: 1px 1px 0px white;
 }
 
-.hint {
-    margin-top: 20px;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-    color: var(--strawberry-red);
-    opacity: 0.8;
-}
-
-/* 裂開動畫同步放大 */
-.candle-split-wrapper { position: relative; height: 250px; margin-bottom: 20px; }
-.candle-part { 
-    width: 22vw; /* 同步放大碎片 */
-    max-width: 90px; 
-    position: absolute; left: 50%; transform: translateX(-50%); 
-    transition: 1.2s cubic-bezier(0.22, 1, 0.36, 1); 
-}
-.white-light { 
-    position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; 
-    background: #fff; box-shadow: 0 0 60px 30px #fff; opacity: 0; 
-}
-
-.open .top { transform: translate(-50%, -130px) rotate(-10deg); opacity: 0.1; }
-.open .bottom { transform: translate(-50%, 130px) rotate(10deg); opacity: 0.1; }
-.open .white-light { opacity: 1; transform: scale(30); }
-
-/* 打火機籤詩區塊 */
-.slips-grid { display: flex; justify-content: center; gap: 10px; width: 100%; }
-.slip {
-    width: 29vw; max-width: 105px; height: 340px;
-    background-size: contain; background-repeat: no-repeat; background-position: center;
-    filter: drop-shadow(0 8px 20px rgba(0,0,0,0.1));
-}
-
+/* 籤詩字體與排列 (維持上一版優化) */
+.slips-grid { display: flex; justify-content: center; gap: 10px; }
+.slip { width: 29vw; max-width: 105px; height: 340px; background-size: contain; background-repeat: no-repeat; }
 .vertical-text {
-    writing-mode: vertical-rl;
-    font-family: 'JinXuan', serif;
-    font-size: 0.82rem;
-    letter-spacing: 1.5px;
-    line-height: 1.5;
-    margin-top: 75px; 
-    max-height: 210px;
-    max-width: 60px;
-    color: #333;
-    overflow: hidden;
-    word-break: break-all;
+    writing-mode: vertical-rl; font-size: 0.82rem; letter-spacing: 1.5px; line-height: 1.5;
+    margin-top: 75px; max-height: 210px; color: #333; font-family: 'JinXuan';
 }
-
-.slip.green { background-image: url('打火機_G_0.jpg'); }
-.slip.white { background-image: url('打火機_W_0.jpg'); }
-.slip.red   { background-image: url('打火機_R_0.jpg'); }
 .slip.red .vertical-text { color: #fff; }
 
-/* 其他按鈕與介面維持質感設定... (省略部分重複代碼，請延用上一版) */
+/* 彈窗 */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 100; display: flex; justify-content: center; align-items: center; }
+.input-box { background: white; padding: 30px; border-radius: 15px; width: 85%; max-width: 320px; }
+
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
