@@ -8,47 +8,102 @@
     --strawberry-red: #e63946;
 }
 
-body {
-    background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3)), url('cake_bg.jpg') center/cover no-repeat;
-    font-family: 'JinXuan', sans-serif;
-    margin: 0; height: 100vh; overflow: hidden;
-    display: flex; justify-content: center; align-items: center;
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body, html {
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    overflow: hidden; /* 徹底禁止滾動 */
+    background-color: #fce4ec;
 }
 
-.stage { position: absolute; width: 100%; top: 50%; left: 50%; transform: translate(-50%, -50%); transition: 0.8s; text-align: center; }
-.hidden { opacity: 0; pointer-events: none; transform: translate(-50%, -45%); }
-.hidden-element { opacity: 0; pointer-events: none; }
+.global-container {
+    width: 100%; height: 100%;
+    background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3)), 
+                url('cake_bg.jpg') center/cover no-repeat;
+    position: relative;
+}
+
+/* 穩定置中的容器 */
+.stage {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    padding: 20px;
+    z-index: 1;
+}
+
+.stage.hidden { opacity: 0; pointer-events: none; transform: translateY(20px); }
+.stage.active { opacity: 1; transform: translateY(0); }
+
+.center-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 /* 初始大蠟燭 */
-.full-candle { width: 45vw; max-width: 180px; filter: drop-shadow(0 8px 20px rgba(230, 57, 70, 0.4)); animation: float 3s infinite ease-in-out; }
-
-/* 許下願望按鈕樣式 */
-.trigger-box { margin-top: 40px; height: 50px; }
-.btn-main { 
-    background: var(--strawberry-red); color: white; border: none; 
-    padding: 12px 35px; border-radius: 30px; font-family: 'JinXuan';
-    font-size: 1.1rem; cursor: pointer; transition: 0.5s;
-    box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3);
+.full-candle { 
+    width: 50vw; max-width: 180px; 
+    filter: drop-shadow(0 8px 20px rgba(230, 57, 70, 0.4)); 
+    animation: float 3s infinite ease-in-out; 
 }
 
-/* 結束畫面風格 */
-.finish-logo { width: 60vw; max-width: 250px; margin-bottom: 20px; }
-.finish-text { 
-    font-size: 1.4rem; color: #444; letter-spacing: 2px; 
-    text-shadow: 1px 1px 0px white;
+/* 打火機區塊 - 確保不跑位 */
+.slips-grid {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin: 20px 0;
 }
 
-/* 籤詩字體與排列 (維持上一版優化) */
-.slips-grid { display: flex; justify-content: center; gap: 10px; }
-.slip { width: 29vw; max-width: 105px; height: 340px; background-size: contain; background-repeat: no-repeat; }
+.slip {
+    width: 30vw; max-width: 100px;
+    aspect-ratio: 1 / 3.2; /* 鎖定比例，防止圖片伸縮 */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+}
+
 .vertical-text {
-    writing-mode: vertical-rl; font-size: 0.82rem; letter-spacing: 1.5px; line-height: 1.5;
-    margin-top: 75px; max-height: 210px; color: #333; font-family: 'JinXuan';
+    writing-mode: vertical-rl;
+    font-family: 'JinXuan', serif;
+    font-size: clamp(0.7rem, 2.5vw, 0.85rem); /* 根據螢幕寬度自動縮放字體 */
+    letter-spacing: 1.5px;
+    line-height: 1.4;
+    margin-top: 22%; /* 依據圖片比例百分比定位 */
+    max-height: 60%;
+    color: #333;
+    overflow: hidden;
 }
+
 .slip.red .vertical-text { color: #fff; }
 
+/* 按鈕與 LOGO */
+.trigger-box { height: 60px; margin-top: 10px; }
+.btn-main { 
+    background: var(--strawberry-red); color: white; border: none; 
+    padding: 12px 30px; border-radius: 30px; font-family: 'JinXuan';
+    font-size: 1rem; cursor: pointer; transition: 0.3s;
+}
+.invisible { opacity: 0; pointer-events: none; }
+
+.finish-logo { width: 50vw; max-width: 220px; }
+.finish-text { font-size: 1.2rem; color: #444; margin: 20px 0; }
+
+/* 下載區優化 */
+#download-zone { background: white; padding: 30px 15px; border-radius: 10px; }
+
 /* 彈窗 */
-.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 100; display: flex; justify-content: center; align-items: center; }
-.input-box { background: white; padding: 30px; border-radius: 15px; width: 85%; max-width: 320px; }
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); z-index: 100; display: flex; justify-content: center; align-items: center; }
+.input-box { background: white; padding: 25px; border-radius: 15px; width: 80%; max-width: 300px; }
 
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
