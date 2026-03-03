@@ -2,7 +2,7 @@ const blessings = [ "天氣冷但你的床特別暖。", "手機沒電時剛好�
 
 let appData = { wish1: "", wish2: "", wishCustom: "", currentIdx: 0 };
 let holdTimer = null;
-const HOLD_TIME = 3000; // 修改為 3 秒
+const HOLD_TIME = 3000; // 3秒蓄力
 
 window.onload = () => {
     const candleArea = document.getElementById('candle-target');
@@ -14,8 +14,9 @@ window.onload = () => {
     const startHold = (e) => {
         if (!document.getElementById('stage-init').classList.contains('active')) return;
         e.preventDefault();
+        
         candleArea.classList.add('charging');
-        marquee.classList.remove('hidden-element'); // 顯示跑馬燈
+        marquee.classList.add('active'); // 觸發展開跑馬燈
         hint.innerText = "願望凝聚中...";
         
         clearTimeout(holdTimer);
@@ -25,7 +26,7 @@ window.onload = () => {
     const endHold = () => {
         clearTimeout(holdTimer);
         candleArea.classList.remove('charging');
-        marquee.classList.add('hidden-element'); // 隱藏跑馬燈
+        marquee.classList.remove('active'); // 隱藏跑馬燈
         if (document.getElementById('stage-init').classList.contains('active')) {
             hint.innerText = "按住蠟燭三秒，凝聚願望";
         }
@@ -35,12 +36,14 @@ window.onload = () => {
     candleArea.addEventListener('touchend', endHold);
     candleArea.addEventListener('mousedown', startHold);
     candleArea.addEventListener('mouseup', endHold);
+    candleArea.addEventListener('mouseleave', endHold);
 };
 
 function startAnimation() {
     const stageInit = document.getElementById('stage-init');
     stageInit.classList.remove('active');
     stageInit.classList.add('hidden');
+    
     document.getElementById('stage-main').classList.remove('hidden');
     generateSlips();
 }
@@ -70,7 +73,7 @@ function moveSlide(dir) {
     appData.currentIdx = (appData.currentIdx + dir + 3) % 3;
     document.getElementById('slips-slider').style.transform = `translateX(-${appData.currentIdx * 300}px)`;
     
-    // 只有在紅色籤紙顯示許下願望按鈕，且它現在位於底部
+    // 控制「許下願望」按鈕在第三張籤紙出現
     const btn = document.getElementById('btn-wish-trigger');
     if (appData.currentIdx === 2) btn.classList.remove('hidden-element');
     else btn.classList.add('hidden-element');
@@ -79,7 +82,8 @@ function moveSlide(dir) {
 function showInputOverlay() { document.getElementById('input-overlay').classList.remove('hidden'); }
 
 function confirmCustomWish() {
-    appData.wishCustom = document.getElementById('custom-wish').value.trim() || "平安順遂";
+    const val = document.getElementById('custom-wish').value.trim();
+    appData.wishCustom = val || "平安順遂";
     document.getElementById('input-overlay').classList.add('hidden');
     generateSlips();
 }
@@ -90,7 +94,7 @@ function downloadShot() {
         const imgData = canvas.toDataURL("image/png");
         const preview = document.createElement('div');
         preview.style = "position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:999; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px;";
-        preview.innerHTML = `<img src="${imgData}" style="max-width:100%; max-height:70vh; border-radius:10px;"><p style="color:white; margin-top:15px; font-family:sans-serif;">☝️ 長按圖片儲存至相簿</p><button onclick="document.body.removeChild(this.parentElement)" style="margin-top:15px; padding:10px 30px; border-radius:20px; border:none; background:#fff;">返回</button>`;
+        preview.innerHTML = `<img src="${imgData}" style="max-width:100%; max-height:70vh; border-radius:10px;"><p style="color:white; margin-top:15px; font-family:sans-serif;">☝️ 長按圖片儲存至相簿</p><button onclick="document.body.removeChild(this.parentElement)" style="margin-top:15px; padding:10px 30px; border-radius:20px; border:none; background:#fff; color:#333; font-weight:bold;">返回網頁</button>`;
         document.body.appendChild(preview);
     });
 }
