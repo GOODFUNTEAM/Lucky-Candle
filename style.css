@@ -21,65 +21,68 @@ body, html {
 .stage { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.5s; }
 .hidden { display: none !important; }
 
-/* 儀式感：蠟燭容器發光控制 */
+/* 儀式感：蠟燭容器 */
 .candle-container { 
-    position: relative; 
-    width: 200px; height: 200px; 
+    position: relative; width: 200px; height: 200px; 
     display: flex; justify-content: center; align-items: center;
-    border-radius: 50%;
-    transition: box-shadow 0.3s ease;
+    border-radius: 50%; transition: box-shadow 0.3s ease;
 }
 
-.full-candle { width: 180px; z-index: 10; pointer-events: none; }
+.full-candle { width: 180px; z-index: 10; pointer-events: none; transition: transform 0.3s ease; }
 
-/* 蓄力中的發光動畫 (Box-shadow) */
-.candle-container.charging { 
-    animation: shadowGlow 5s linear forwards; 
-}
+/* 長按中的發光與呼吸動畫 (改為 3秒) */
+.candle-container.charging { animation: shadowGlow 3s linear forwards; }
+.candle-container.charging .full-candle { animation: breathing 1s ease-in-out infinite; }
 
 @keyframes shadowGlow {
     0% { box-shadow: 0 0 10px 5px rgba(255, 230, 100, 0.4); }
-    50% { box-shadow: 0 0 60px 25px rgba(255, 180, 50, 0.7); }
     100% { box-shadow: 0 0 150px 60px rgba(255, 150, 0, 0.9); }
+}
+
+@keyframes breathing {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* 跑馬燈樣式 */
+.marquee-wrapper {
+    position: absolute; top: 15%; width: 100%; overflow: hidden;
+    background: rgba(230, 57, 70, 0.8); color: white; padding: 8px 0;
+}
+.marquee-content {
+    display: inline-block; white-space: nowrap; font-size: 1rem;
+    animation: marquee 10s linear infinite; padding-left: 100%;
+}
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
 }
 
 .hint { margin-top: 25px; color: var(--strawberry-red); font-weight: bold; letter-spacing: 1px; }
 
-/* 輪播區 */
+/* 輪播與按鈕區 (按鈕已整合至下方) */
 .carousel-area { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; }
 .carousel-window { width: 300px; height: 420px; overflow: hidden; position: relative; }
 .slips-slider { display: flex; transition: transform 0.5s ease-in-out; }
 
-.slip {
-    width: 300px; height: 420px; flex-shrink: 0;
-    background-size: contain; background-repeat: no-repeat; background-position: center;
-    position: relative; display: flex; justify-content: center;
-}
+.slip { width: 300px; height: 420px; flex-shrink: 0; background-size: contain; background-repeat: no-repeat; background-position: center; position: relative; display: flex; justify-content: center; }
 .slip.green { background-image: url('打火機_G_0.png'); }
 .slip.white { background-image: url('打火機_W_0.png'); }
 .slip.red   { background-image: url('打火機_R_0.png'); }
 
-.vertical-text {
-    writing-mode: vertical-rl; position: absolute; top: 52%; left: 50%;
-    transform: translate(-50%, -50%); font-size: 1.1rem; letter-spacing: 2px;
-    color: #333; max-height: 240px; text-align: center;
-}
+.vertical-text { writing-mode: vertical-rl; position: absolute; top: 52%; left: 50%; transform: translate(-50%, -50%); font-size: 1.1rem; letter-spacing: 2px; color: #333; max-height: 240px; text-align: center; }
 
-/* 導航箭頭 */
-.nav-btn {
-    position: absolute; z-index: 20; background: rgba(255,255,255,0.95);
-    width: 45px; height: 45px; border-radius: 50%; border: none; color: var(--strawberry-red);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1); font-size: 1.2rem;
-}
+.nav-btn { position: absolute; z-index: 20; background: rgba(255,255,255,0.95); width: 45px; height: 45px; border-radius: 50%; border: none; color: var(--strawberry-red); box-shadow: 0 4px 10px rgba(0,0,0,0.1); font-size: 1.2rem; }
 .prev { left: 10px; } .next { right: 10px; }
 
-/* 結尾 LOGO 尺寸優化 */
+.bottom-actions { margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .finish-logo { width: 160px; height: auto; margin-bottom: 20px; }
 .finish-text { font-size: 1.25rem; color: #444; margin-bottom: 30px; }
 
-.btn-main, .btn-confirm, .btn-again { background: var(--strawberry-red); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-size: 1rem; }
+.btn-main, .btn-confirm, .btn-again { background: var(--strawberry-red); color: white; border: none; padding: 12px 40px; border-radius: 25px; font-size: 1rem; width: fit-content; }
 .btn-secondary { background: white; border: 1px solid #ddd; padding: 8px 18px; border-radius: 20px; color: #666; font-size: 0.9rem; margin: 5px; }
-.hidden-element { display: none; }
+.hidden-element { display: none !important; }
+
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 500; }
 .input-box { background: white; padding: 25px; border-radius: 15px; width: 85%; max-width: 300px; text-align: center; }
 textarea { width: 100%; height: 80px; margin: 15px 0; }
