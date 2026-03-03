@@ -15,15 +15,17 @@
                 <div class="marquee-content">您即將獲得兩個祝福及一個許願機會，請記得在籤紙上許下願望！</div>
             </div>
             
-            <div class="candle-container" id="candle-target">
-                <img src="candle_off.png" alt="未開啟" class="candle-img" id="img-off">
-                <img src="candle_on.png" alt="開啟" class="candle-img hidden-img" id="img-on">
+            <div class="candle-wrapper">
+                <div class="candle-container" id="candle-target">
+                    <img src="candle_off.png" alt="未開啟" class="candle-img" id="img-off">
+                    <img src="candle_on.png" alt="開啟" class="candle-img hidden-img" id="img-on">
+                </div>
+                <p class="hint" id="touch-hint">按住蠟燭三秒，凝聚願望</p>
             </div>
-            <p class="hint" id="touch-hint">按住蠟燭三秒，凝聚願望</p>
         </div>
 
         <div id="stage-main" class="stage hidden">
-            <div class="carousel-area" id="touch-zone">
+            <div class="carousel-area">
                 <button class="nav-btn prev" onclick="moveSlide(-1)">&#10094;</button>
                 <div id="download-zone" class="carousel-window">
                     <div id="slips-slider" class="slips-slider"></div>
@@ -32,12 +34,12 @@
             </div>
 
             <div class="bottom-actions">
+                <div id="wish-btn-container" class="btn-wish-wrapper hidden-element">
+                    <button class="btn-wish-effect" onclick="showInputOverlay()">許下願望</button>
+                </div>
                 <div class="flex-btns">
                     <button onclick="downloadShot()" class="btn-secondary">儲存此籤</button>
                     <button onclick="goToFinish()" class="btn-secondary">送出願望</button>
-                </div>
-                <div id="wish-btn-container" class="btn-wish-wrapper hidden-element">
-                    <button class="btn-wish-effect" onclick="showInputOverlay()">許下願望</button>
                 </div>
             </div>
 
