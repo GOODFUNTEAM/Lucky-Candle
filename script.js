@@ -1,38 +1,44 @@
-const blessings = [ "天氣冷但你的床特別暖。", "手機沒電時剛好有插座。", "USB 插第一下就對。", "滑倒時沒人看到。", "隨機播放到想聽的音樂。", "想出門時天氣剛好轉晴。", "通勤路上一路綠燈。", "搭車都有位子。", "摩托車永遠有好車位停。", "下班時間永遠準點。", "提案一次過。", "公車司機願意多等你三秒。", "點外送永遠沒漏單。", "吃薯條永遠是脆的那包。", "買鹽酥雞永遠多送一塊。", "喜歡的人記得你講過的廢話。", "喜歡的人來按我限動讚。", "他居然記得你的生日。", "貓咪今天對你特別友善。", "遇到的貓貓都可以擼。", "鍋貼皮酥內嫩，沒有焦。", "洗衣服時襪子永遠成雙。", "透明膠帶每次都找得到頭。", "你放在口袋的衛生紙沒有被洗爛。", "吃東西掉下去的那一口剛好掉在包裝紙上。", "湯圓都不會破。", "公共廁所剛好剩下最後一張紙。", "你今天穿什麼都好看。", "忘帶雨傘時都不會下雨。", "GOSHARE帽子都不會臭。", "沒錢的日子，口袋裡摸到忘記的五百塊。", "喜歡的人主動問你在幹嘛。" ];
+const blessings = [ "天氣冷但你的床特別暖。", "手機沒電時剛好有插座。", "USB 插第一下就對。", "滑倒時沒人看到。", "隨機播放到想聽的音樂。", "想出門時天氣剛好轉晴。", "通勤路上一路綠燈。", "搭車都有位子。", "摩托車永遠有好車位停。", "下班時間永遠準點。", "提案一次過。", "公車司機願意多等你三秒。", "點外送永遠沒漏單。", "吃薯條永遠是脆的那包。", "買鹽酥雞永遠多送一塊。", "喜歡的人來按我限動讚。", "貓咪今天對你特別友善。", "遇到的貓貓都可以擼。", "洗衣服時襪子永遠成雙。", "透明膠帶每次都找得到頭。", "你放在口袋的衛生紙沒有被洗爛。", "吃東西掉下去的那一口剛好掉在包裝紙上。", "湯圓都不會破。", "公共廁所剛好剩下最後一張紙。", "你今天穿什麼都好看。", "忘帶雨傘時都不會下雨。", "GOSHARE帽子都不會臭。", "沒錢的日子，口袋裡摸到忘記的五百塊。", "喜歡的人主動問你在幹嘛。" ];
 
 let appData = { wish1: "", wish2: "", wishCustom: "", currentIdx: 0 };
 let holdTimer = null;
 const HOLD_TIME = 5000;
 
-// 初始化監聽長按
 window.onload = () => {
-    const candle = document.querySelector('.candle-wrapper');
-    const hint = document.querySelector('.hint');
+    const candleArea = document.querySelector('.candle-container');
+    const hint = document.getElementById('touch-hint');
+
+    // 防止長按選單干擾
+    candleArea.oncontextmenu = (e) => { e.preventDefault(); return false; };
 
     const startHold = (e) => {
+        if (!document.getElementById('stage-init').classList.contains('active')) return;
         e.preventDefault();
-        candle.classList.add('charging');
+        candleArea.classList.add('charging');
         hint.innerText = "願望凝聚中...";
         holdTimer = setTimeout(startAnimation, HOLD_TIME);
     };
 
     const endHold = () => {
         clearTimeout(holdTimer);
-        candle.classList.remove('charging');
-        hint.innerText = "按住蠟燭五秒，凝聚願望";
+        candleArea.classList.remove('charging');
+        if (document.getElementById('stage-init').classList.contains('active')) {
+            hint.innerText = "按住蠟燭五秒，凝聚願望";
+        }
     };
 
-    candle.addEventListener('touchstart', startHold);
-    candle.addEventListener('touchend', endHold);
-    candle.addEventListener('mousedown', startHold);
-    candle.addEventListener('mouseup', endHold);
+    candleArea.addEventListener('touchstart', startHold, { passive: false });
+    candleArea.addEventListener('touchend', endHold);
+    candleArea.addEventListener('mousedown', startHold);
+    candleArea.addEventListener('mouseup', endHold);
+    candleArea.addEventListener('mouseleave', endHold);
 };
 
 function startAnimation() {
     document.getElementById('stage-init').classList.add('hidden');
+    document.getElementById('stage-init').classList.remove('active');
     document.getElementById('stage-main').classList.remove('hidden');
     generateSlips();
-    moveSlide(0);
 }
 
 function generateSlips() {
@@ -40,8 +46,7 @@ function generateSlips() {
     slider.innerHTML = "";
     if (!appData.wish1) {
         let shuffled = [...blessings].sort(() => 0.5 - Math.random());
-        appData.wish1 = shuffled[0];
-        appData.wish2 = shuffled[1];
+        appData.wish1 = shuffled[0]; appData.wish2 = shuffled[1];
     }
     const config = [
         { cl: 'green', text: appData.wish1 },
@@ -54,6 +59,7 @@ function generateSlips() {
         div.innerHTML = `<span class="vertical-text">${item.text}</span>`;
         slider.appendChild(div);
     });
+    moveSlide(0);
 }
 
 function moveSlide(dir) {
@@ -70,8 +76,6 @@ function confirmCustomWish() {
     appData.wishCustom = document.getElementById('custom-wish').value.trim() || "平安順遂";
     document.getElementById('input-overlay').classList.add('hidden');
     generateSlips();
-    appData.currentIdx = 2;
-    moveSlide(0);
 }
 
 function downloadShot() {
