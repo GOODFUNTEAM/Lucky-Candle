@@ -10,12 +10,14 @@
 <body>
     <div class="global-container">
         <div id="stage-init" class="stage active">
-            <img src="candle_full.png" class="full-candle" onclick="startAnimation()">
-            <p class="hint">點擊蠟燭，開啟願望</p>
+            <div class="candle-wrapper">
+                <img src="candle_full.png" alt="燭籤" class="full-candle">
+            </div>
+            <p class="hint">按住蠟燭五秒，凝聚願望</p>
         </div>
 
         <div id="stage-main" class="stage hidden">
-            <div class="carousel-area">
+            <div class="carousel-container">
                 <button class="nav-btn prev" onclick="moveSlide(-1)">&#10094;</button>
                 
                 <div id="download-zone" class="carousel-window">
@@ -44,7 +46,7 @@
         </div>
 
         <div id="stage-finish" class="stage hidden">
-            <img src="logo.png" class="finish-logo">
+            <img src="logo.png" alt="孤芳小隊" class="finish-logo">
             <h2 class="finish-text">孤芳小隊 祝您心想事成</h2>
             <button onclick="resetAll()" class="btn-again">再來一次</button>
         </div>
