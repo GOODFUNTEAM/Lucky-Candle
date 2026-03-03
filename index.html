@@ -9,21 +9,24 @@
 </head>
 <body>
     <div class="global-container">
-        <div id="stage-init" class="stage">
-            <img src="candle_full.png" alt="燭籤" class="full-candle clickable" onclick="startAnimation()">
-            <p class="hint">點擊燭籤，開啟願望</p>
+        <div id="stage-init" class="stage active">
+            <div class="center-content">
+                <img src="candle_full.png" alt="燭籤" class="full-candle clickable" onclick="startAnimation()">
+                <p class="hint">點擊蠟燭，開啟願望</p>
+            </div>
         </div>
 
         <div id="stage-interact" class="stage hidden">
-            <div class="candle-split-wrapper">
-                <img src="candle_top.png" class="candle-part top">
-                <div class="white-light"></div>
-                <img src="candle_bottom.png" class="candle-part bottom">
-            </div>
-            <div id="slips-container" class="slips-grid"></div>
-            
-            <div class="trigger-box">
-                <button id="btn-trigger-input" class="btn-main hidden-element" onclick="showInputOverlay()">輸入願望</button>
+            <div class="center-content">
+                <div class="candle-split-wrapper">
+                    <img src="candle_top.png" class="candle-part top">
+                    <div class="white-light"></div>
+                    <img src="candle_bottom.png" class="candle-part bottom">
+                </div>
+                <div id="slips-container" class="slips-grid"></div>
+                <div class="trigger-box">
+                    <button id="btn-trigger-input" class="btn-main invisible" onclick="showInputOverlay()">許下願望</button>
+                </div>
             </div>
 
             <div id="input-overlay" class="overlay hidden">
@@ -36,18 +39,20 @@
         </div>
 
         <div id="stage-summary" class="stage hidden">
-            <div id="download-zone">
-                <div id="final-slips" class="slips-grid"></div>
-                <p class="summary-footer">孤芳小隊 - 燭籤 Lucky Candle</p>
-            </div>
-            <div class="action-buttons">
-                <button onclick="downloadShot()" class="btn-download">儲存畫面</button>
-                <button onclick="goToFinish()" class="btn-wish">送出許願</button>
+            <div class="center-content">
+                <div id="download-zone">
+                    <div id="final-slips" class="slips-grid"></div>
+                    <p class="summary-footer">孤芳小隊 - 燭籤 Lucky Candle</p>
+                </div>
+                <div class="action-buttons">
+                    <button onclick="downloadShot()" class="btn-download">儲存畫面</button>
+                    <button onclick="goToFinish()" class="btn-wish">送出許願</button>
+                </div>
             </div>
         </div>
 
         <div id="stage-finish" class="stage hidden">
-            <div class="finish-content">
+            <div class="center-content finish-box">
                 <img src="logo.png" alt="孤芳小隊" class="finish-logo">
                 <h2 class="finish-text">孤芳小隊 祝您心想事成</h2>
                 <button onclick="resetAll()" class="btn-again">再來一次</button>
