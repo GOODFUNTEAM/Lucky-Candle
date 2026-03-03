@@ -10,18 +10,20 @@
 <body>
     <div class="global-container">
         <div id="stage-init" class="stage active">
+            <div id="marquee-container" class="marquee-wrapper hidden-element">
+                <div class="marquee-content">您即將獲得兩個祝福及一個許願機會，請記得在籤紙上許下願望！</div>
+            </div>
             <div class="candle-container" id="candle-target">
                 <img src="candle_full.png" alt="燭籤" class="full-candle">
             </div>
-            <p class="hint" id="touch-hint">按住蠟燭五秒，凝聚願望</p>
+            <p class="hint" id="touch-hint">按住蠟燭三秒，凝聚願望</p>
         </div>
 
         <div id="stage-main" class="stage hidden">
             <div class="carousel-area">
                 <button class="nav-btn prev" onclick="moveSlide(-1)">&#10094;</button>
                 <div id="download-zone" class="carousel-window">
-                    <div id="slips-slider" class="slips-slider">
-                        </div>
+                    <div id="slips-slider" class="slips-slider"></div>
                 </div>
                 <button class="nav-btn next" onclick="moveSlide(1)">&#10095;</button>
             </div>
