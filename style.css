@@ -18,47 +18,39 @@ body, html {
     position: relative; display: flex; justify-content: center; align-items: center;
 }
 
+/* 版權文字樣式 */
+.footer-copyright {
+    position: absolute;
+    bottom: 15px;
+    width: 100%;
+    text-align: center;
+    font-size: 0.7rem; /* 文字縮小 */
+    color: rgba(0, 0, 0, 0.4); /* 調淡顏色，增加精緻感 */
+    letter-spacing: 1px;
+    pointer-events: none; /* 避免干擾點擊 */
+}
+
+/* 其餘樣式維持不變 */
 .stage { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.5s; }
 .hidden { display: none !important; }
 
-/* 跑馬燈 */
-.marquee-wrapper {
-    position: absolute; top: 60px; left: 0; width: 100%; overflow: hidden;
-    background: rgba(230, 57, 70, 0.9); color: white; padding: 12px 0; z-index: 100; display: none;
-}
+.marquee-wrapper { position: absolute; top: 60px; left: 0; width: 100%; overflow: hidden; background: rgba(230, 57, 70, 0.9); color: white; padding: 12px 0; z-index: 100; display: none; }
 .marquee-wrapper.active { display: block; }
-.marquee-content {
-    display: inline-block; white-space: nowrap; font-size: 1.1rem; font-weight: bold;
-    padding-left: 100%; animation: marquee-scroll 8s linear infinite;
-}
+.marquee-content { display: inline-block; white-space: nowrap; font-size: 1.1rem; font-weight: bold; padding-left: 100%; animation: marquee-scroll 8s linear infinite; }
 @keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-200%); } }
 
-/* 蠟燭容器與呼吸效果 */
-.candle-container { position: relative; width: 280px; height: 280px; display: flex; justify-content: center; align-items: center; }
+.candle-container { position: relative; width: 280px; height: 280px; display: flex; justify-content: center; align-items: center; border-radius: 50%; }
 .candle-img { width: 250px; position: absolute; transition: 0.3s; z-index: 10; }
 .hidden-img { opacity: 0; pointer-events: none; }
 
-/* 蓄力中：光暈變大 + 呼吸 */
 .candle-container.charging { animation: shadowGlow 3s linear forwards; }
 .candle-container.charging #img-off { animation: breathing 0.8s ease-in-out infinite; }
-
-@keyframes shadowGlow {
-    0% { box-shadow: 0 0 10px 5px rgba(255, 230, 100, 0.3); }
-    100% { box-shadow: 0 0 200px 100px rgba(255, 150, 0, 0.9); }
-}
+@keyframes shadowGlow { 0% { box-shadow: 0 0 10px 5px rgba(255, 230, 100, 0.3); } 100% { box-shadow: 0 0 200px 100px rgba(255, 150, 0, 0.9); } }
 @keyframes breathing { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
-/* 關鍵爆發動畫：透明度100%變0% 同時放大 */
-.explosion-effect {
-    animation: explosion 0.8s ease-out forwards;
-}
+.explosion-effect { animation: explosion 0.8s ease-out forwards; }
+@keyframes explosion { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(2.5); } }
 
-@keyframes explosion {
-    0% { opacity: 1; transform: scale(1); }
-    100% { opacity: 0; transform: scale(2.5); } /* 放大並消失 */
-}
-
-/* 其餘樣式維持... */
 .hint { margin-top: 30px; color: var(--strawberry-red); font-weight: bold; font-size: 1.1rem; }
 .vertical-text { writing-mode: vertical-rl; position: absolute; top: 52%; left: 50%; transform: translate(-50%, -50%); font-size: 1.15rem; letter-spacing: 3px; color: #333; max-height: 280px; line-height: 1.8; text-align: center; }
 .carousel-window { width: 300px; height: 420px; overflow: hidden; position: relative; }
@@ -76,7 +68,7 @@ body, html {
 .btn-wish-wrapper { margin-top: 5px; }
 .btn-wish-effect { padding: 12px 50px; font-size: 1.1rem; color: #333; }
 .btn-wish-effect.breathing-glow { animation: btn-breath 1.5s ease-in-out infinite; }
-@keyframes btn-breath { 0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 200, 50, 0.3); } 50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 150, 0, 0.5); } }
+@keyframes btn-breath { 0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 200, 50, 0.3); } 50% { transform: scale(1.05); box-shadow: 0 0 200px 50px rgba(255, 150, 0, 0.5); } }
 .finish-btns { display: flex; flex-direction: column; gap: 12px; width: 180px; }
 .btn-again { background: var(--strawberry-red); color: white; border: none; padding: 12px 0; font-size: 1rem; }
 .btn-ig { display: block; text-decoration: none; text-align: center; padding: 12px 0; }
