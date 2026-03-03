@@ -1,0 +1,64 @@
+:root {
+    --bg-color: #1a1a1a;
+    --wish-red: #ff4d4d;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: #fff;
+    font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.global-container { width: 100%; max-width: 600px; position: relative; text-align: center; }
+.stage { position: absolute; width: 100%; transition: opacity 0.5s; }
+.hidden { opacity: 0; pointer-events: none; visibility: hidden; }
+.clickable { cursor: pointer; }
+
+/* 蠟燭與白光動畫 */
+.full-candle { max-width: 120px; animation: pulse 2s infinite; }
+.candle-split-wrapper { position: relative; height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.candle-part { max-width: 60px; position: absolute; transition: transform 1s, opacity 1s; }
+.white-light { position: absolute; width: 10px; height: 10px; background: #fff; border-radius: 50%; box-shadow: 0 0 50px 30px #fff; opacity: 0; transition: all 0.5s; }
+
+.open .top { transform: translateY(-100px) rotate(-10deg); opacity: 0.5; }
+.open .bottom { transform: translateY(100px) rotate(10deg); opacity: 0.5; }
+.open .white-light { opacity: 1; transform: scale(8); }
+
+/* 打火機籤詩樣式 */
+.slips-grid { display: flex; justify-content: center; gap: 10px; margin-top: -50px; }
+.slip {
+    width: 130px; height: 380px;
+    background-size: contain; background-repeat: no-repeat; background-position: center;
+    display: flex; justify-content: center; align-items: center;
+}
+.vertical-text {
+    writing-mode: vertical-rl; text-orientation: mixed;
+    font-size: 1.1rem; letter-spacing: 2px;
+    margin-top: 60px; max-height: 240px; line-height: 1.4;
+    color: #333; font-weight: bold;
+}
+
+/* 綁定圖片 */
+.slip.green { background-image: url('打火機_G_0.jpg'); }
+.slip.white { background-image: url('打火機_W_0.jpg'); }
+.slip.red   { background-image: url('打火機_R_0.jpg'); }
+.slip.red .vertical-text { color: #fff; }
+
+/* 彈窗與按鈕 */
+.overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; display: flex; justify-content: center; align-items: center; }
+.input-box { background: white; color: #333; padding: 25px; border-radius: 15px; width: 280px; }
+textarea { width: 100%; height: 80px; margin: 10px 0; }
+button { padding: 10px 20px; border-radius: 20px; border: none; cursor: pointer; }
+.btn-wish { background: var(--wish-red); color: white; margin-left: 10px; }
+
+/* 飛走動畫 */
+.fly-away { animation: flyBack 1s forwards; }
+@keyframes flyBack { to { transform: scale(0) translateY(-200px); opacity: 0; } }
+
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
