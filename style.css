@@ -1,4 +1,3 @@
-/* 引入金喧體 */
 @font-face {
     font-family: 'JinXuan';
     src: url('jf-jinxuan-3.1-medium.otf') format('opentype');
@@ -6,78 +5,97 @@
 }
 
 :root {
-    --bg-color: #1a1a1a;
-    --wish-red: #ff4d4d;
+    --cake-white: #fffcf7;
+    --strawberry-red: #e63946;
+    --shadow-color: rgba(0, 0, 0, 0.08);
 }
 
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
 body {
-    background-color: var(--bg-color);
-    color: #fff;
+    background-color: #fce4ec; /* 預設粉色 */
+    /* 這裡可以放你的草莓蛋糕背景圖 */
+    background: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.4)), 
+                url('cake_bg.jpg') center/cover no-repeat;
+    color: #444;
     font-family: 'JinXuan', "Microsoft JhengHei", sans-serif;
     margin: 0;
-    overflow: hidden;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    overflow: hidden;
 }
 
-.global-container { width: 100%; max-width: 600px; position: relative; text-align: center; }
-.stage { position: absolute; width: 100%; transition: opacity 0.5s; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-.hidden { opacity: 0; pointer-events: none; visibility: hidden; }
+.global-container { width: 100%; height: 100%; position: relative; }
+
+.stage { 
+    position: absolute; width: 100%; top: 50%; left: 50%; 
+    transform: translate(-50%, -50%); transition: all 0.8s ease; 
+    padding: 0 15px; text-align: center;
+}
+
+.hidden { opacity: 0; transform: translate(-50%, -45%); pointer-events: none; }
 
 /* 蠟燭動畫 */
-.full-candle { max-width: 120px; cursor: pointer; animation: pulse 2s infinite; }
-.candle-split-wrapper { position: relative; height: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.candle-part { max-width: 60px; position: absolute; transition: transform 1s, opacity 1s; }
-.white-light { position: absolute; width: 10px; height: 10px; background: #fff; border-radius: 50%; box-shadow: 0 0 50px 30px #fff; opacity: 0; transition: all 0.5s; }
+.full-candle { width: 25vw; max-width: 100px; filter: drop-shadow(0 5px 15px var(--strawberry-red)); animation: float 3s infinite ease-in-out; }
 
-.open .top { transform: translateY(-120px) rotate(-10deg); opacity: 0.3; }
-.open .bottom { transform: translateY(120px) rotate(10deg); opacity: 0.3; }
-.open .white-light { opacity: 1; transform: scale(10); }
+.candle-split-wrapper { position: relative; height: 180px; margin-bottom: 20px; }
+.candle-part { width: 12vw; max-width: 50px; position: absolute; left: 50%; transform: translateX(-50%); transition: 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
+.white-light { position: absolute; left: 50%; top: 50%; width: 2px; height: 2px; background: #fff; box-shadow: 0 0 40px 20px #fff; opacity: 0; }
 
-/* 打火機籤詩樣式 */
-.slips-grid { display: flex; justify-content: center; gap: 8px; margin-top: -20px; }
+.open .top { transform: translate(-50%, -100px) rotate(-5deg); opacity: 0.2; }
+.open .bottom { transform: translate(-50%, 100px) rotate(5deg); opacity: 0.2; }
+.open .white-light { opacity: 1; transform: scale(15); }
+
+/* 打火機籤詩適配 */
+.slips-grid { display: flex; justify-content: center; gap: 15px; width: 100%; }
 .slip {
-    width: 120px; height: 380px;
+    width: 28vw; max-width: 110px; height: 350px;
     background-size: contain; background-repeat: no-repeat; background-position: center;
-    display: flex; justify-content: center; align-items: flex-start;
+    filter: drop-shadow(0 8px 20px var(--shadow-color));
 }
+
 .vertical-text {
     writing-mode: vertical-rl;
-    text-orientation: mixed;
     font-family: 'JinXuan', serif;
     font-size: 0.85rem;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
     line-height: 1.6;
-    margin-top: 85px; /* 避開金屬蓋 */
-    max-height: 230px; /* 防止文字超出底部 */
-    max-width: 70px;  /* 防止文字太靠邊緣 */
+    margin-top: 75px; /* 避開機頭 */
+    max-height: 220px;
+    max-width: 60px;
     color: #333;
-    overflow: hidden;
     text-align: justify;
+    overflow: hidden;
 }
 
 .slip.green { background-image: url('打火機_G_0.jpg'); }
 .slip.white { background-image: url('打火機_W_0.jpg'); }
 .slip.red   { background-image: url('打火機_R_0.jpg'); }
-.slip.red .vertical-text { color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+.slip.red .vertical-text { color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
 
-/* 下載區域設定 */
-#download-zone { padding: 40px 20px; background-color: var(--bg-color); display: inline-block; }
+/* 下載區塊美化 */
+#download-zone { 
+    background: white; 
+    padding: 40px 20px; 
+    border-radius: 4px; 
+    display: inline-block;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
 
-/* 介面按鈕 */
-.overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 100; display: flex; justify-content: center; align-items: center; }
-.input-box { background: #fff; color: #333; padding: 30px; border-radius: 15px; width: 280px; }
-textarea { width: 100%; height: 100px; margin: 15px 0; font-family: 'JinXuan'; font-size: 1rem; padding: 10px; box-sizing: border-box; }
-button { border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-family: 'JinXuan'; transition: 0.3s; }
-.btn-confirm { background: var(--wish-red); color: white; width: 100%; }
-.btn-download { background: #444; color: white; }
-.btn-wish { background: var(--wish-red); color: white; }
-.btn-again { background: #fff; color: #1a1a1a; margin-top: 20px; }
+/* 彈窗設計 */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 100; display: flex; justify-content: center; align-items: center; }
+.input-box { background: white; padding: 30px; border-radius: 2px; width: 85%; max-width: 300px; text-align: center; border-top: 4px solid var(--strawberry-red); }
+textarea { width: 100%; height: 100px; border: 1px solid #eee; background: #fafafa; font-family: 'JinXuan'; font-size: 1rem; padding: 10px; outline: none; resize: none; }
 
-.action-buttons { margin-top: 30px; display: flex; gap: 15px; justify-content: center; }
+button { border: none; padding: 12px 24px; font-family: 'JinXuan'; cursor: pointer; letter-spacing: 1px; transition: 0.3s; }
+.btn-confirm { background: var(--strawberry-red); color: white; width: 100%; margin-top: 10px; }
+.btn-download { background: #eee; color: #444; }
+.btn-wish { background: var(--strawberry-red); color: white; }
 
-@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
-.fly-away { animation: flyBack 1.2s forwards ease-in; }
-@keyframes flyBack { to { transform: scale(0) translateY(-300px); opacity: 0; } }
+.action-buttons { margin-top: 30px; display: flex; gap: 12px; justify-content: center; }
+
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+.fly-away { animation: flyOut 1s forwards ease-in; }
+@keyframes flyOut { to { transform: scale(0.5) translateY(-500px); opacity: 0; } }
