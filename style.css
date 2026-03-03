@@ -1,49 +1,40 @@
-/* 左右導航箭頭 - 強化版 */
+/* 強化箭頭：圓形白底 + 紅色箭頭，確保在蛋糕背景上不消失 */
 .nav-btn {
-    /* 基本設定 */
     position: absolute;
-    z-index: 20; /* 確保在打火機之上 */
-    top: 50%; /* 垂直置中 */
-    transform: translateY(-50%); /* 完美的垂直對齊 */
-    
-    /* 視覺強化：圓形背景與顏色 */
-    background-color: rgba(255, 255, 255, 0.85); /* 半透明白色背景，提高對比 */
-    color: var(--strawberry-red); /* 箭頭使用草莓紅 */
-    border: none;
-    
-    /* 尺寸與形狀：放大觸控範圍 */
-    width: 50px;
-    height: 50px;
-    border-radius: 50%; /* 圓形 */
-    
-    /* 字體與對齊：確保箭頭置中 */
-    font-size: 1.6rem; /* 放大箭頭符號 */
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    background-color: rgba(255, 255, 255, 0.9); /* 高亮度白底 */
+    color: var(--strawberry-red);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    
-    /* 質感提升：加入陰影與過渡效果 */
+    font-size: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    border: none;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* 深色陰影，增加立體感 */
-    transition: all 0.3s ease;
+}
+.prev { left: 10px; }
+.next { right: 10px; }
+
+/* 穩定籤詩文字：鎖定在打火機機身中央 */
+.vertical-text {
+    writing-mode: vertical-rl;
+    font-family: 'JinXuan', serif;
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    line-height: 1.5;
+    color: #333; /* 統一黑色文字 */
     
-    /* 防止文字被選取 */
-    user-select: none;
-    -webkit-user-select: none;
-}
-
-/* 觸控/滑鼠懸停效果 */
-.nav-btn:active, .nav-btn:hover {
-    background-color: rgba(255, 255, 255, 1); /* 變為純白 */
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* 陰影加深 */
-    transform: translateY(-50%) scale(1.05); /* 輕微放大 */
-}
-
-/* 左右位置微調 */
-.prev {
-    left: 15px; /* 距離左側距離 */
-}
-
-.next {
-    right: 15px; /* 距離右側距離 */
+    position: absolute;
+    top: 55%; /* 55% 是針對你 PNG 打火機機身的黃金位置 */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    max-height: 240px;
+    white-space: nowrap;
+    pointer-events: none;
 }
