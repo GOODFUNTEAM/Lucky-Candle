@@ -33,7 +33,6 @@ window.onload = () => {
     candleArea.addEventListener('mousedown', startHold);
     candleArea.addEventListener('mouseup', endHold);
 
-    // 螢幕滑動偵測
     let touchStartX = 0;
     touchZone.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
     touchZone.addEventListener('touchend', (e) => {
@@ -76,7 +75,7 @@ function generateSlips() {
     const config = [
         { cl: 'green', text: appData.wish1 },
         { cl: 'white', text: appData.wish2 },
-        { cl: 'red',   text: appData.wishCustom || "點擊按鈕許願" }
+        { cl: 'red',   text: appData.wishCustom || "點擊下方按鈕許願" }
     ];
     config.forEach(item => {
         const div = document.createElement('div');
@@ -90,9 +89,14 @@ function generateSlips() {
 function moveSlide(dir) {
     appData.currentIdx = (appData.currentIdx + dir + 3) % 3;
     document.getElementById('slips-slider').style.transform = `translateX(-${appData.currentIdx * 300}px)`;
+    
+    // 只有在第三張紅籤 (Index 2) 才顯示許願按鈕
     const wishBtn = document.getElementById('wish-btn-container');
-    if (appData.currentIdx === 2) wishBtn.classList.remove('hidden-element');
-    else wishBtn.classList.add('hidden-element');
+    if (appData.currentIdx === 2) {
+        wishBtn.style.display = "block";
+    } else {
+        wishBtn.style.display = "none";
+    }
 }
 
 function downloadShot() {
@@ -112,9 +116,12 @@ function downloadShot() {
 
 function showInputOverlay() { document.getElementById('input-overlay').classList.remove('hidden'); }
 function confirmCustomWish() {
-    appData.wishCustom = document.getElementById('custom-wish').value.trim() || "平安順遂";
-    document.getElementById('input-overlay').classList.add('hidden');
-    generateSlips();
+    const val = document.getElementById('custom-wish').value.trim();
+    if (val) {
+        appData.wishCustom = val;
+        document.getElementById('input-overlay').classList.add('hidden');
+        generateSlips();
+    }
 }
 function goToFinish() { 
     document.getElementById('stage-main').classList.add('hidden'); 
