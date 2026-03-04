@@ -14,7 +14,6 @@
             <div id="marquee-container" class="marquee-wrapper">
                 <div class="marquee-content">您即將獲得兩個祝福及一個許願機會，請記得在籤紙上許下願望！</div>
             </div>
-            
             <div class="candle-wrapper">
                 <div class="candle-container" id="candle-target">
                     <img src="candle_off.png" alt="未開啟" class="candle-img" id="img-off">
@@ -27,27 +26,24 @@
         <div id="stage-main" class="stage hidden">
             <div class="carousel-area" id="touch-zone">
                 <button class="nav-btn prev" onclick="moveSlide(-1)">&#10094;</button>
-                
                 <div id="download-zone" class="carousel-window">
-                    <div id="slips-slider" class="slips-slider">
-                        </div>
+                    <div id="slips-slider" class="slips-slider"></div>
                     <div class="download-footer">
                         <img src="logo.png" alt="Logo" class="mini-logo">
                         <span class="ig-account">@GOODFUN.TEAM</span>
                     </div>
                 </div>
-                
                 <button class="nav-btn next" onclick="moveSlide(1)">&#10095;</button>
             </div>
 
             <div class="bottom-actions">
-                <div id="wish-btn-container" style="display: none; margin-bottom: 10px;">
-                    <button class="btn-wish-effect" onclick="showInputOverlay()">許下願望</button>
-                </div>
-
                 <div class="flex-btns">
                     <button onclick="downloadShot()" class="btn-secondary">儲存此籤</button>
                     <button onclick="goToFinish()" class="btn-secondary">送出願望</button>
+                </div>
+
+                <div id="wish-btn-container" style="display: none; margin-top: 15px;">
+                    <button class="btn-wish-effect" onclick="showInputOverlay()">許下願望</button>
                 </div>
             </div>
 
@@ -69,9 +65,7 @@
             </div>
         </div>
 
-        <footer class="footer-copyright">
-            © 2026 GOODFUN TEAM. All Rights Reserved.
-        </footer>
+        <footer class="footer-copyright">© 2026 GOODFUN TEAM. All Rights Reserved.</footer>
     </div>
     <script src="script.js"></script>
 </body>
