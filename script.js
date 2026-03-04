@@ -90,8 +90,8 @@ function moveSlide(dir) {
     appData.currentIdx = (appData.currentIdx + dir + 3) % 3;
     document.getElementById('slips-slider').style.transform = `translateX(-${appData.currentIdx * 300}px)`;
     
-    // 只有在第三張紅籤 (Index 2) 才顯示許願按鈕
     const wishBtn = document.getElementById('wish-btn-container');
+    // 只有在第三張紅籤 (Index 2) 才顯示許願按鈕
     if (appData.currentIdx === 2) {
         wishBtn.style.display = "block";
     } else {
