@@ -1,3 +1,8 @@
+// --- [請填寫此處] Google 表單設定 ---
+const GOOGLE_FORM_ID = "這裡請填入你的表單長ID"; 
+const WISH_ENTRY_ID = "entry.1237601643"; // 這是你剛才找到的 ID
+
+// --- 祝福語庫 ---
 const blessings = [ "天氣冷但你的床特別暖。", "手機沒電時剛好有插座。", "USB 插第一下就對。", "滑倒時沒人看到。", "隨機播放到想聽的音樂。", "想出門時天氣剛好轉晴。", "通勤路上一路綠燈。", "搭車都有位子。", "摩托車永遠有好車位停。", "下班時間永遠準點。", "提案一次過。", "公車司機願意多等你三秒。", "點外送永遠沒漏單。", "吃薯條永遠是脆的那包。", "買鹽酥雞永遠多送一塊。", "喜歡的人主動問你在幹嘛。" ];
 
 let appData = { wish1: "", wish2: "", wishCustom: "", currentIdx: 0 };
@@ -91,7 +96,6 @@ function moveSlide(dir) {
     document.getElementById('slips-slider').style.transform = `translateX(-${appData.currentIdx * 300}px)`;
     
     const wishBtn = document.getElementById('wish-btn-container');
-    // 只有在第三張紅籤 (Index 2) 才顯示許願按鈕
     if (appData.currentIdx === 2) {
         wishBtn.style.display = "block";
     } else {
@@ -115,6 +119,7 @@ function downloadShot() {
 }
 
 function showInputOverlay() { document.getElementById('input-overlay').classList.remove('hidden'); }
+
 function confirmCustomWish() {
     const val = document.getElementById('custom-wish').value.trim();
     if (val) {
@@ -123,8 +128,26 @@ function confirmCustomWish() {
         generateSlips();
     }
 }
+
+// --- 修正後的願望收集邏輯 ---
 function goToFinish() { 
+    const finalWish = appData.wishCustom || "未填寫願望";
+    const formUrl = `https://docs.google.com/forms/d/e/${GOOGLE_FORM_ID}/formResponse`;
+    
+    const params = new URLSearchParams();
+    params.append(WISH_ENTRY_ID, finalWish);
+
+    // 背景靜默傳送
+    fetch(formUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: params.toString()
+    }).catch(e => console.log("Silent error:", e));
+
+    // 直接跳轉畫面
     document.getElementById('stage-main').classList.add('hidden'); 
     document.getElementById('stage-finish').classList.remove('hidden'); 
 }
+
 function resetAll() { location.reload(); }
