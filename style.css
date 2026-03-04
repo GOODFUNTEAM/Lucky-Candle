@@ -47,14 +47,14 @@ body, html {
 
 .hint { width: 100%; text-align: center; font-size: 1rem; color: #444; margin-top: 30px; letter-spacing: 1px; display: block; font-weight: bold; }
 
-/* 輪播與下載區塊佈局 */
+/* 輪播與下載區塊 */
 .carousel-area {
     width: 100%;
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: -40px; /* 整體上移避開底部按鈕 */
+    margin-top: -50px; /* 稍微再往上一點，留空間給多層按鈕 */
 }
 
 .carousel-window {
@@ -66,7 +66,6 @@ body, html {
     border-radius: 15px;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 
 .slips-slider {
@@ -97,7 +96,6 @@ body, html {
     display: flex; flex-direction: row-reverse;
 }
 
-/* 下載圖專屬底部 (Logo與IG帳號) */
 .download-footer {
     height: 60px;
     width: 100%;
@@ -112,20 +110,36 @@ body, html {
 .mini-logo { width: 45px; height: auto; margin-bottom: 3px; }
 .ig-account { font-size: 0.65rem; color: #999; font-weight: bold; font-family: Arial, sans-serif; letter-spacing: 0.8px; }
 
-/* 按鈕與導航 */
 .nav-btn { position: absolute; z-index: 20; background: rgba(255,255,255,0.9); width: 45px; height: 45px; border-radius: 50%; border: none; color: var(--strawberry-red); font-size: 1.2rem; cursor: pointer; }
 .prev { left: -5px; }
 .next { right: -5px; }
 
-.bottom-actions { margin-top: 35px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-.flex-btns { display: flex; gap: 15px; }
+/* 按鈕容器配置 */
+.bottom-actions { 
+    margin-top: 25px; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+}
+
+.flex-btns { 
+    display: flex; 
+    gap: 15px; 
+}
 
 .btn-secondary, .btn-wish-effect, .btn-again, .btn-confirm, .btn-more {
     font-family: 'JinXuan' !important; background: white; border: 1px solid #ddd;
     border-radius: 35px; padding: 12px 28px; font-weight: bold; font-size: 1rem; color: #444;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; text-decoration: none;
 }
-.btn-wish-effect { padding: 15px 50px; border-color: #ffb400; background: #fffbeb !important; }
+
+/* 許願按鈕特別樣式 */
+.btn-wish-effect { 
+    padding: 12px 60px; 
+    border-color: #ffb400; 
+    background: #fffbeb !important; 
+    color: #b08d00 !important;
+}
 
 .finish-logo { width: 120px; height: auto; margin-bottom: 25px; }
 .finish-text { font-size: 1.2rem; color: #444; margin-bottom: 30px; }
@@ -136,3 +150,4 @@ body, html {
 .footer-copyright { position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 0.75rem; color: rgba(0, 0, 0, 0.4); pointer-events: none; }
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 500; }
 .input-box { background: white; padding: 25px; border-radius: 15px; width: 85%; max-width: 320px; text-align: center; }
+textarea { width: 100%; height: 100px; padding: 10px; border-radius: 10px; border: 1px solid #ddd; margin: 15px 0; font-family: inherit; }
