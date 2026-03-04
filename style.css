@@ -3,168 +3,64 @@
     src: url('jf-jinxuan-3.1-medium.otf') format('opentype');
 }
 
-:root {
-    --strawberry-red: #e63946;
+:root { --strawberry-red: #e63946; }
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+
+body, html { 
+    margin: 0; padding: 0; width: 100%; height: 100%; 
+    overflow: hidden; background-color: #fce4ec; font-family: 'JinXuan', sans-serif;
 }
 
-* {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-}
-
-body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background-color: #fce4ec;
-    font-family: 'JinXuan', sans-serif;
-}
-
-/* 主容器 */
 .global-container {
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     background: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)), url('cake_bg.jpg') center/cover no-repeat;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: relative; display: flex; justify-content: center; align-items: center;
 }
 
-/* 階段切換通用設定 */
-.stage {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    transition: 0.5s;
-}
-
-.hidden {
-    display: none !important;
-}
-
-/* --- 階段 1：初始畫面樣式 --- */
+.stage { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.5s; }
+.hidden { display: none !important; }
 
 /* 跑馬燈 */
 .marquee-wrapper {
-    position: absolute;
-    top: 10%;
-    left: 0;
-    width: 100%;
-    overflow: hidden;
-    background: rgba(230, 57, 70, 0.9);
-    color: white;
-    padding: 15px 0;
-    z-index: 100;
+    position: absolute; top: 10%; left: 0; width: 100%; overflow: hidden;
+    background: rgba(230, 57, 70, 0.9); color: white; padding: 15px 0; z-index: 100;
     display: none;
 }
+.marquee-wrapper.active { display: block; }
+.marquee-content { display: inline-block; white-space: nowrap; font-size: 1.1rem; font-weight: bold; padding-left: 100%; animation: marquee-scroll 10s linear infinite; }
+@keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-150%); } }
 
-.marquee-wrapper.active {
-    display: block;
-}
+/* 蠟燭蓄力 & 光暈 */
+.candle-container { position: relative; width: 280px; height: 280px; display: flex; justify-content: center; align-items: center; border-radius: 50%; }
+.candle-img { width: 250px; position: absolute; transition: transform 0.3s ease; z-index: 10; }
+.hidden-img { opacity: 0; pointer-events: none; }
 
-.marquee-content {
-    display: inline-block;
-    white-space: nowrap;
-    font-size: 1.1rem;
-    font-weight: bold;
-    padding-left: 100%;
-    animation: marquee-scroll 10s linear infinite;
-}
+.candle-container.charging { animation: shadowGlow 3s linear forwards; }
+.candle-container.charging .candle-img { animation: breathe 0.8s ease-in-out infinite; } 
 
-@keyframes marquee-scroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-150%); }
-}
+@keyframes shadowGlow { 0% { box-shadow: 0 0 10px 5px rgba(255, 230, 100, 0.3); } 100% { box-shadow: 0 0 200px 100px rgba(255, 150, 0, 0.9); } }
+@keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
-/* 蠟燭容器與光暈效果 */
-.candle-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
+.explosion-effect { animation: explosion 0.8s ease-out forwards; }
+@keyframes explosion { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(2.5); } }
 
-.candle-container {
-    position: relative;
-    width: 280px;
-    height: 280px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%; /* 確保光暈呈圓形擴散 */
-}
+.hint { width: 100%; text-align: center; font-size: 1rem; color: #444; margin-top: 30px; letter-spacing: 1px; display: block; font-weight: bold; }
 
-.candle-img {
-    width: 250px;
-    position: absolute;
-    transition: transform 0.3s ease;
-    z-index: 10;
-}
-
-.hidden-img {
-    opacity: 0;
-    pointer-events: none;
-}
-
-/* 蓄力呼吸與光暈 */
-.candle-container.charging {
-    animation: shadowGlow 3s linear forwards;
-}
-
-.candle-container.charging .candle-img {
-    animation: breathe 0.8s ease-in-out infinite;
-}
-
-@keyframes shadowGlow {
-    0% { box-shadow: 0 0 10px 5px rgba(255, 230, 100, 0.3); }
-    100% { box-shadow: 0 0 200px 100px rgba(255, 150, 0, 0.9); }
-}
-
-@keyframes breathe {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-}
-
-/* 爆炸消失動畫 */
-.explosion-effect {
-    animation: explosion 0.8s ease-out forwards;
-}
-
-@keyframes explosion {
-    0% { opacity: 1; transform: scale(1); }
-    100% { opacity: 0; transform: scale(2.5); }
-}
-
-/* 提示文字：確保畫面置中 */
-.hint {
-    width: 100%;
-    text-align: center;
-    font-size: 1rem;
-    color: #444;
-    margin-top: 30px;
-    letter-spacing: 1px;
-    display: block;
-    font-weight: bold;
-}
-
-/* --- 階段 2：籤紙畫面樣式 --- */
-
+/* --- 輪播與下載區塊佈局 --- */
 .carousel-window {
     width: 300px;
-    height: 420px;
+    height: 480px; /* 增加高度以容納底部資訊 */
     overflow: hidden;
     position: relative;
+    background: #fff;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
 }
 
 .slips-slider {
+    height: 420px;
     display: flex !important;
     flex-direction: row !important;
     transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -185,130 +81,48 @@ body, html {
 .slip.red   { background-image: url('打火機_R_0.png'); }
 
 .vertical-text {
-    writing-mode: vertical-rl;
-    position: absolute;
-    top: 52%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 1.15rem;
-    letter-spacing: 4px;
-    color: #333;
-    line-height: 2.2;
-    text-align: start;
-    white-space: pre;
-    display: flex;
-    flex-direction: row-reverse;
+    writing-mode: vertical-rl; position: absolute; top: 52%; left: 50%;
+    transform: translate(-50%, -50%); font-size: 1.15rem; letter-spacing: 4px;
+    color: #333; line-height: 2.2; text-align: start; white-space: pre;
+    display: flex; flex-direction: row-reverse;
 }
 
-/* 按鈕與導航 */
-.nav-btn {
-    position: absolute;
-    z-index: 20;
-    background: rgba(255,255,255,0.9);
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    border: none;
-    color: var(--strawberry-red);
-    font-size: 1.2rem;
-    cursor: pointer;
-}
-
-.prev { left: 0px; }
-.next { right: 0px; }
-
-.bottom-actions {
-    margin-top: 25px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-}
-
-.flex-btns {
-    display: flex;
-    gap: 15px;
-}
-
-.btn-secondary, .btn-wish-effect, .btn-again, .btn-confirm, .btn-more {
-    font-family: 'JinXuan' !important;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 35px;
-    padding: 12px 28px;
-    font-weight: bold;
-    font-size: 1rem;
-    color: #444;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    cursor: pointer;
-    text-decoration: none;
-    text-align: center;
-}
-
-.btn-wish-effect {
-    padding: 15px 60px;
-    border-color: #ffb400;
-}
-
-/* --- 階段 3：結束畫面樣式 --- */
-
-.finish-logo {
-    width: 120px;
-    height: auto;
-    margin-bottom: 25px;
-}
-
-.finish-text {
-    font-size: 1.2rem;
-    color: #444;
-    margin-bottom: 30px;
-}
-
-.finish-btns {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    width: 200px;
-}
-
-.btn-again {
-    background: var(--strawberry-red) !important;
-    color: white !important;
-    border: none !important;
-}
-
-/* 版權宣告：低調鎖定在螢幕最下方 */
-.footer-copyright {
-    position: absolute;
-    bottom: 15px;
+/* 下載圖專屬底部 */
+.download-footer {
+    height: 60px;
     width: 100%;
-    text-align: center;
-    font-size: 0.75rem;
-    color: rgba(0, 0, 0, 0.4);
-    pointer-events: none;
-}
-
-/* 許願輸入遮罩 */
-.overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.8);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 500;
+    background: #ffffff;
+    padding-bottom: 5px;
 }
 
-.input-box {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    width: 85%;
-    max-width: 320px;
-    text-align: center;
-}
+.mini-logo { width: 55px; height: auto; margin-bottom: 2px; }
+.ig-account { font-size: 0.7rem; color: #888; font-weight: bold; font-family: Arial, sans-serif; letter-spacing: 0.5px; }
 
-.btn-confirm {
-    margin-top: 15px;
-    width: 100%;
+/* 按鈕與導航 */
+.nav-btn { position: absolute; z-index: 20; background: rgba(255,255,255,0.9); width: 45px; height: 45px; border-radius: 50%; border: none; color: var(--strawberry-red); font-size: 1.2rem; cursor: pointer; }
+.prev { left: -10px; }
+.next { right: -10px; }
+
+.bottom-actions { margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.flex-btns { display: flex; gap: 15px; }
+
+.btn-secondary, .btn-wish-effect, .btn-again, .btn-confirm, .btn-more {
+    font-family: 'JinXuan' !important; background: white; border: 1px solid #ddd;
+    border-radius: 35px; padding: 12px 28px; font-weight: bold; font-size: 1rem; color: #444;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; text-decoration: none;
 }
+.btn-wish-effect { padding: 15px 60px; border-color: #ffb400; }
+
+.finish-logo { width: 120px; height: auto; margin-bottom: 25px; }
+.finish-text { font-size: 1.2rem; color: #444; margin-bottom: 30px; }
+.finish-btns { display: flex; flex-direction: column; gap: 15px; width: 200px; }
+.btn-again { background: var(--strawberry-red) !important; color: white !important; border: none !important; text-align: center; }
+.btn-more { text-align: center; }
+
+.footer-copyright { position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 0.75rem; color: rgba(0, 0, 0, 0.4); pointer-events: none; }
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 500; }
+.input-box { background: white; padding: 25px; border-radius: 15px; width: 85%; max-width: 320px; text-align: center; }
