@@ -47,28 +47,26 @@ body, html {
 
 .hint { width: 100%; text-align: center; font-size: 1rem; color: #444; margin-top: 30px; letter-spacing: 1px; display: block; font-weight: bold; }
 
-/* --- 輪播與下載區塊佈局 (修正擋住問題) --- */
+/* 輪播與下載區塊佈局 */
 .carousel-area {
     width: 100%;
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* --- 新增：將輪播區域上移，騰出空間給帳號 --- */
-    margin-top: -30px; 
-    /* ----------------------------------------- */
+    margin-top: -40px; /* 整體上移避開底部按鈕 */
 }
 
 .carousel-window {
     width: 300px;
-    height: 480px; /* 增加高度以容納底部資訊 */
+    height: 480px; 
     overflow: hidden;
     position: relative;
     background: #fff;
     border-radius: 15px;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1); /* 增加點立體感 */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 
 .slips-slider {
@@ -99,7 +97,7 @@ body, html {
     display: flex; flex-direction: row-reverse;
 }
 
-/* 下載圖專屬底部 cite: style.css */
+/* 下載圖專屬底部 (Logo與IG帳號) */
 .download-footer {
     height: 60px;
     width: 100%;
@@ -108,27 +106,17 @@ body, html {
     justify-content: center;
     align-items: center;
     background: #ffffff;
-    padding-bottom: 8px; /* 稍微增加底部內距 cite: style.css */
+    padding-bottom: 8px;
 }
 
-.mini-logo { width: 50px; height: auto; margin-bottom: 3px; }
-
-/* 修正：字體再稍微縮小，確保在小螢幕上也不會因為擁擠而被擋住 cite: style.css */
-.ig-account { 
-    font-size: 0.65rem; /* 微調縮小 cite: style.css */
-    color: #999; /* 調淡顏色，更精緻 */
-    font-weight: bold; 
-    font-family: Arial, sans-serif; 
-    letter-spacing: 0.8px; 
-    display: block;
-}
+.mini-logo { width: 45px; height: auto; margin-bottom: 3px; }
+.ig-account { font-size: 0.65rem; color: #999; font-weight: bold; font-family: Arial, sans-serif; letter-spacing: 0.8px; }
 
 /* 按鈕與導航 */
 .nav-btn { position: absolute; z-index: 20; background: rgba(255,255,255,0.9); width: 45px; height: 45px; border-radius: 50%; border: none; color: var(--strawberry-red); font-size: 1.2rem; cursor: pointer; }
-.prev { left: -10px; }
-.next { right: -10px; }
+.prev { left: -5px; }
+.next { right: -5px; }
 
-/* 修正：增加上方外距，避免按鈕擠在帳號正下方 cite: style.css */
 .bottom-actions { margin-top: 35px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .flex-btns { display: flex; gap: 15px; }
 
@@ -137,7 +125,7 @@ body, html {
     border-radius: 35px; padding: 12px 28px; font-weight: bold; font-size: 1rem; color: #444;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; text-decoration: none;
 }
-.btn-wish-effect { padding: 15px 60px; border-color: #ffb400; }
+.btn-wish-effect { padding: 15px 50px; border-color: #ffb400; background: #fffbeb !important; }
 
 .finish-logo { width: 120px; height: auto; margin-bottom: 25px; }
 .finish-text { font-size: 1.2rem; color: #444; margin-bottom: 30px; }
