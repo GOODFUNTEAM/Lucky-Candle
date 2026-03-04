@@ -33,12 +33,13 @@ window.onload = () => {
     candleArea.addEventListener('mousedown', startHold);
     candleArea.addEventListener('mouseup', endHold);
 
+    // 螢幕滑動偵測
     let touchStartX = 0;
     touchZone.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
     touchZone.addEventListener('touchend', (e) => {
         let touchEndX = e.changedTouches[0].screenX;
-        if (touchEndX - touchStartX > 50) moveSlide(-1);
-        else if (touchEndX - touchStartX < -50) moveSlide(1);
+        if (touchStartX - touchEndX > 50) moveSlide(1);
+        else if (touchEndX - touchStartX > 50) moveSlide(-1);
     }, { passive: true });
 };
 
@@ -96,14 +97,19 @@ function moveSlide(dir) {
 
 function downloadShot() {
     const zone = document.getElementById('download-zone');
-    html2canvas(zone, { scale: 3 }).then(canvas => {
+    html2canvas(zone, { scale: 3, backgroundColor: "#ffffff", useCORS: true }).then(canvas => {
         const imgData = canvas.toDataURL("image/png");
         const preview = document.createElement('div');
-        preview.style = "position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:999; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px;";
-        preview.innerHTML = `<img src="${imgData}" style="max-width:100%; max-height:70vh; border-radius:10px;"><p style="color:white; margin-top:15px;">☝️ 長按圖片儲存</p><button onclick="document.body.removeChild(this.parentElement)" style="margin-top:15px; padding:12px 35px; border-radius:20px; border:none; background:#fff; font-family:'JinXuan'; font-weight:bold;">返回</button>`;
+        preview.style = "position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:999; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px;";
+        preview.innerHTML = `
+            <img src="${imgData}" style="max-width:100%; max-height:75vh; border-radius:10px; border: 4px solid white;">
+            <p style="color:white; margin-top:15px; font-weight:bold;">☝️ 長按圖片儲存至相簿</p>
+            <button onclick="document.body.removeChild(this.parentElement)" style="margin-top:15px; padding:12px 40px; border-radius:25px; border:none; background:#fff; font-family:'JinXuan'; font-weight:bold;">返回</button>
+        `;
         document.body.appendChild(preview);
     });
 }
+
 function showInputOverlay() { document.getElementById('input-overlay').classList.remove('hidden'); }
 function confirmCustomWish() {
     appData.wishCustom = document.getElementById('custom-wish').value.trim() || "平安順遂";
