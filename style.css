@@ -47,7 +47,18 @@ body, html {
 
 .hint { width: 100%; text-align: center; font-size: 1rem; color: #444; margin-top: 30px; letter-spacing: 1px; display: block; font-weight: bold; }
 
-/* --- 輪播與下載區塊佈局 --- */
+/* --- 輪播與下載區塊佈局 (修正擋住問題) --- */
+.carousel-area {
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* --- 新增：將輪播區域上移，騰出空間給帳號 --- */
+    margin-top: -30px; 
+    /* ----------------------------------------- */
+}
+
 .carousel-window {
     width: 300px;
     height: 480px; /* 增加高度以容納底部資訊 */
@@ -57,6 +68,7 @@ body, html {
     border-radius: 15px;
     display: flex;
     flex-direction: column;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1); /* 增加點立體感 */
 }
 
 .slips-slider {
@@ -87,7 +99,7 @@ body, html {
     display: flex; flex-direction: row-reverse;
 }
 
-/* 下載圖專屬底部 */
+/* 下載圖專屬底部 cite: style.css */
 .download-footer {
     height: 60px;
     width: 100%;
@@ -96,18 +108,28 @@ body, html {
     justify-content: center;
     align-items: center;
     background: #ffffff;
-    padding-bottom: 5px;
+    padding-bottom: 8px; /* 稍微增加底部內距 cite: style.css */
 }
 
-.mini-logo { width: 55px; height: auto; margin-bottom: 2px; }
-.ig-account { font-size: 0.7rem; color: #888; font-weight: bold; font-family: Arial, sans-serif; letter-spacing: 0.5px; }
+.mini-logo { width: 50px; height: auto; margin-bottom: 3px; }
+
+/* 修正：字體再稍微縮小，確保在小螢幕上也不會因為擁擠而被擋住 cite: style.css */
+.ig-account { 
+    font-size: 0.65rem; /* 微調縮小 cite: style.css */
+    color: #999; /* 調淡顏色，更精緻 */
+    font-weight: bold; 
+    font-family: Arial, sans-serif; 
+    letter-spacing: 0.8px; 
+    display: block;
+}
 
 /* 按鈕與導航 */
 .nav-btn { position: absolute; z-index: 20; background: rgba(255,255,255,0.9); width: 45px; height: 45px; border-radius: 50%; border: none; color: var(--strawberry-red); font-size: 1.2rem; cursor: pointer; }
 .prev { left: -10px; }
 .next { right: -10px; }
 
-.bottom-actions { margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+/* 修正：增加上方外距，避免按鈕擠在帳號正下方 cite: style.css */
+.bottom-actions { margin-top: 35px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .flex-btns { display: flex; gap: 15px; }
 
 .btn-secondary, .btn-wish-effect, .btn-again, .btn-confirm, .btn-more {
