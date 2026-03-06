@@ -5,7 +5,11 @@
 
 :root { --strawberry-red: #e63946; }
 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+* { 
+    box-sizing: border-box; 
+    -webkit-tap-highlight-color: transparent; 
+    touch-action: manipulation; 
+}
 
 body, html { 
     margin: 0; padding: 0; width: 100%; height: 100%; 
@@ -31,11 +35,24 @@ body, html {
 .marquee-content { display: inline-block; white-space: nowrap; font-size: 1.1rem; font-weight: bold; padding-left: 100%; animation: marquee-scroll 10s linear infinite; }
 @keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-150%); } }
 
-/* 蠟燭蓄力 & 光暈 */
-.candle-container { position: relative; width: 280px; height: 280px; display: flex; justify-content: center; align-items: center; border-radius: 50%; }
-.candle-img { width: 250px; position: absolute; transition: transform 0.3s ease; z-index: 10; }
-.hidden-img { opacity: 0; pointer-events: none; }
+/* 蠟燭容器：防止 iOS 預設行為 */
+.candle-container { 
+    position: relative; width: 280px; height: 280px; 
+    display: flex; justify-content: center; align-items: center; 
+    border-radius: 50%; cursor: pointer;
+    touch-action: none; /* 禁用預設手勢 */
+}
 
+.candle-img { 
+    width: 250px; position: absolute; transition: transform 0.3s ease; z-index: 10;
+    /* 禁止長按儲存 */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: none; /* 點擊穿透至容器 */
+}
+
+.hidden-img { opacity: 0; pointer-events: none; }
 .candle-container.charging { animation: shadowGlow 3s linear forwards; }
 .candle-container.charging .candle-img { animation: breathe 0.8s ease-in-out infinite; } 
 
@@ -45,46 +62,13 @@ body, html {
 .explosion-effect { animation: explosion 0.8s ease-out forwards; }
 @keyframes explosion { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(2.5); } }
 
-.hint { width: 100%; text-align: center; font-size: 1rem; color: #444; margin-top: 30px; letter-spacing: 1px; display: block; font-weight: bold; }
+.hint { width: 100%; text-align: center; font-size: 1rem; color: #444; margin-top: 30px; font-weight: bold; }
 
-/* 輪播與下載區塊 */
-.carousel-area {
-    width: 100%;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: -50px; /* 稍微再往上一點，留空間給多層按鈕 */
-}
-
-.carousel-window {
-    width: 300px;
-    height: 480px; 
-    overflow: hidden;
-    position: relative;
-    background: #fff;
-    border-radius: 15px;
-    display: flex;
-    flex-direction: column;
-}
-
-.slips-slider {
-    height: 420px;
-    display: flex !important;
-    flex-direction: row !important;
-    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.slip {
-    width: 300px !important;
-    height: 420px;
-    flex-shrink: 0;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    position: relative;
-}
-
+/* 輪播區塊 */
+.carousel-area { width: 100%; position: relative; display: flex; justify-content: center; align-items: center; margin-top: -50px; }
+.carousel-window { width: 300px; height: 480px; overflow: hidden; position: relative; background: #fff; border-radius: 15px; display: flex; flex-direction: column; }
+.slips-slider { height: 420px; display: flex; transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+.slip { width: 300px; height: 420px; flex-shrink: 0; background-size: contain; background-repeat: no-repeat; background-position: center; position: relative; }
 .slip.green { background-image: url('打火機_G_0.png'); }
 .slip.white { background-image: url('打火機_W_0.png'); }
 .slip.red   { background-image: url('打火機_R_0.png'); }
@@ -96,56 +80,28 @@ body, html {
     display: flex; flex-direction: row-reverse;
 }
 
-.download-footer {
-    height: 60px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: #ffffff;
-    padding-bottom: 8px;
-}
-
+/* 下載圖底部標識 */
+.download-footer { height: 60px; width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #ffffff; padding-bottom: 8px; }
 .mini-logo { width: 45px; height: auto; margin-bottom: 3px; }
 .ig-account { font-size: 0.65rem; color: #999; font-weight: bold; font-family: Arial, sans-serif; letter-spacing: 0.8px; }
 
-.nav-btn { position: absolute; z-index: 20; background: rgba(255,255,255,0.9); width: 45px; height: 45px; border-radius: 50%; border: none; color: var(--strawberry-red); font-size: 1.2rem; cursor: pointer; }
-.prev { left: -5px; }
-.next { right: -5px; }
-
-/* 按鈕容器配置 */
-.bottom-actions { 
-    margin-top: 25px; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-}
-
-.flex-btns { 
-    display: flex; 
-    gap: 15px; 
-}
-
+/* 按鈕樣式 */
+.nav-btn { position: absolute; z-index: 20; background: rgba(255,255,255,0.9); width: 45px; height: 45px; border-radius: 50%; border: none; color: var(--strawberry-red); font-size: 1.2rem; }
+.prev { left: -5px; } .next { right: -5px; }
+.bottom-actions { margin-top: 25px; display: flex; flex-direction: column; align-items: center; }
+.flex-btns { display: flex; gap: 15px; }
 .btn-secondary, .btn-wish-effect, .btn-again, .btn-confirm, .btn-more {
     font-family: 'JinXuan' !important; background: white; border: 1px solid #ddd;
     border-radius: 35px; padding: 12px 28px; font-weight: bold; font-size: 1rem; color: #444;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer;
 }
-
-/* 許願按鈕特別樣式 */
-.btn-wish-effect { 
-    padding: 12px 60px; 
-    border-color: #ffb400; 
-    background: #fffbeb !important; 
-    color: #b08d00 !important;
-}
+.btn-wish-effect { padding: 12px 60px; border-color: #ffb400; background: #fffbeb !important; color: #b08d00 !important; }
 
 .finish-logo { width: 120px; height: auto; margin-bottom: 25px; }
 .finish-text { font-size: 1.2rem; color: #444; margin-bottom: 30px; }
 .finish-btns { display: flex; flex-direction: column; gap: 15px; width: 200px; }
 .btn-again { background: var(--strawberry-red) !important; color: white !important; border: none !important; text-align: center; }
-.btn-more { text-align: center; }
+.btn-more { text-align: center; text-decoration: none; }
 
 .footer-copyright { position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 0.75rem; color: rgba(0, 0, 0, 0.4); pointer-events: none; }
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 500; }
