@@ -1,8 +1,7 @@
-// --- [已更新] Google 正式表單 ID ---
+// --- Google 表單設定 ---
 const GOOGLE_FORM_ID = "1FAIpQLSeYXUsPXJLJ-fiWWOB6hEqBS_DK10iNcG1V4KKKVeZHhxDWzg"; 
 const WISH_ENTRY_ID = "entry.1237601643"; 
 
-// --- 祝福語庫 ---
 const blessings = [ "天氣冷但你的床特別暖。", "手機沒電時剛好有插座。", "USB 插第一下就對。", "滑倒時沒人看到。", "隨機播放到想聽的音樂。", "想出門時天氣剛好轉晴。", "通勤路上一路綠燈。", "搭車都有位子。", "摩托車永遠有好車位停。", "下班時間永遠準點。", "提案一次過。", "公車司機願意多等你三秒。", "點外送永遠沒漏單。", "吃薯條永遠是脆的那包。", "買鹽酥雞永遠多送一塊。", "喜歡的人主動問你在幹嘛。" ];
 
 let appData = { wish1: "", wish2: "", wishCustom: "", currentIdx: 0 };
@@ -16,10 +15,15 @@ window.onload = () => {
 
     const startHold = (e) => {
         if (!document.getElementById('stage-init').classList.contains('active')) return;
-        e.preventDefault();
+        
+        // 關鍵：阻止 iOS 彈出儲存圖片選單
+        if (e.cancelable) e.preventDefault();
+
         candleArea.classList.add('charging');
         marquee.classList.add('active'); 
         document.getElementById('touch-hint').innerText = "願望凝聚中...";
+        
+        if (holdTimer) clearTimeout(holdTimer);
         holdTimer = setTimeout(triggerExplosion, HOLD_TIME);
     };
 
@@ -33,6 +37,7 @@ window.onload = () => {
         }
     };
 
+    // 事件監聽：passive 設為 false 以允許 preventDefault
     candleArea.addEventListener('touchstart', startHold, { passive: false });
     candleArea.addEventListener('touchend', endHold);
     candleArea.addEventListener('mousedown', startHold);
@@ -96,11 +101,8 @@ function moveSlide(dir) {
     document.getElementById('slips-slider').style.transform = `translateX(-${appData.currentIdx * 300}px)`;
     
     const wishBtn = document.getElementById('wish-btn-container');
-    if (appData.currentIdx === 2) {
-        wishBtn.style.display = "block";
-    } else {
-        wishBtn.style.display = "none";
-    }
+    if (appData.currentIdx === 2) wishBtn.style.display = "block";
+    else wishBtn.style.display = "none";
 }
 
 function downloadShot() {
@@ -119,7 +121,6 @@ function downloadShot() {
 }
 
 function showInputOverlay() { document.getElementById('input-overlay').classList.remove('hidden'); }
-
 function confirmCustomWish() {
     const val = document.getElementById('custom-wish').value.trim();
     if (val) {
@@ -129,11 +130,9 @@ function confirmCustomWish() {
     }
 }
 
-// 送出願望：靜默傳送至 Google 表單後切換畫面
 function goToFinish() { 
     const finalWish = appData.wishCustom || "未填寫願望";
     const formUrl = `https://docs.google.com/forms/d/e/${GOOGLE_FORM_ID}/formResponse`;
-    
     const params = new URLSearchParams();
     params.append(WISH_ENTRY_ID, finalWish);
 
@@ -142,9 +141,7 @@ function goToFinish() {
         mode: "no-cors",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: params.toString()
-    })
-    .then(() => console.log("願望已排隊傳送"))
-    .catch(e => console.log("Silent error:", e));
+    }).catch(e => console.log(e));
 
     document.getElementById('stage-main').classList.add('hidden'); 
     document.getElementById('stage-finish').classList.remove('hidden'); 
